@@ -38,12 +38,12 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
 
             using(var product = new Product())
             {
-                //product.CurrentPrice = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span").InnerText.Replace("TL", String.Empty));
+                product.CurrentPrice = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span")?.InnerText.Replace("TL", String.Empty));
                 product.Name = doc.QuerySelector("#productTitle").InnerText.Trim();
                 product.Image = doc.QuerySelector("#landingImage").Attributes["src"].Value;
                 product.StockState = doc.QuerySelector("#availability > span").InnerText.Trim();
                 product.Url = url;      
-                product.Rate = EditRate(doc.QuerySelector("#acrPopover > span.a-declarative > a > i.a-icon.a-icon-star.a-star-4-5 > span")?.InnerText.Split(" ")[3]);
+                product.Rate = EditRate(doc.DocumentNode.SelectSingleNode("//*[@id='acrPopover']/span[1]/a/i[1]/span")?.InnerText.Split(" ")[3]);
                 product.TechnicalDetails = doc.DocumentNode.SelectNodes(@"//*[@id='feature-bullets']/ul//li").Select(li => li.InnerText).ToList<string>();
                 product.Description = doc.QuerySelector("#productDescription > p > span")?.InnerText;
 

@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Amazon_Price_Tracker.Controllers
 {
-    
-
     [Route("api/[controller]")]
     [ApiController]
     public class TrackedProductsController : ControllerBase

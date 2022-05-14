@@ -22,6 +22,8 @@ namespace AmazonPriceTrackerAPI.Domain.Entities
 
         public DateTime NextRunTime { get; set; }
 
+        public DateTime MailSendingDate { get; set; }
+
         public void Dispose() 
         {
             Console.WriteLine("Tracked Product dispose runned.");
