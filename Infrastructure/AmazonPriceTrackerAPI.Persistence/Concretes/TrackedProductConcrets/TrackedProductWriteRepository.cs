@@ -28,7 +28,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
                                              ITrackedProductReadRepository trackedProductReadRepository) : base(context)
         {
             _htmlWeb = new HtmlWeb();
-            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36";
+            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36";
             _productReadRepository = productReadRepository;
             _trackedProductReadRepository = trackedProductReadRepository;
         }
@@ -50,7 +50,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
             }
             
             HtmlDocument doc = _htmlWeb.Load(product.Url);
-            var price = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span").InnerText.Replace("TL", String.Empty));
+            var price = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen").InnerText.Replace("TL", String.Empty));
 
             if (price == null)
             {

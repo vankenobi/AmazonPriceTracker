@@ -11,6 +11,7 @@ namespace AmazonPriceTrackerAPI.Application.Repositories
     public interface IReadRepository<T> : IRepository<T> where T : BaseEntity
     { 
         IQueryable<T> GetAll(bool tracking = false);
+        Task<List<T>> GetAllAsync(bool tracking = false);
         IQueryable<T> GetWhere(Expression<Func<T,bool>> method, bool tracking = false);
         Task<T> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = false);
         Task<T> GetByIdAsync(int id, bool tracking = false);

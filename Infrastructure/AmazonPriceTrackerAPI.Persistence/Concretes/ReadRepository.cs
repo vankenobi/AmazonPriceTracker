@@ -30,6 +30,12 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
             return query.AsNoTracking();
         }
 
+        public async Task<List<T>> GetAllAsync(bool tracking = false)
+        {
+            if (tracking)
+                return await Table.ToListAsync();
+            return await Table.AsNoTracking().ToListAsync();
+        }
 
         public async Task<T> GetByIdAsync(int id, bool tracking = false)
         {

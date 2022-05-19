@@ -22,7 +22,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                                       IProductReadRepository productReadRepository) : base(context)
         {
             _htmlWeb = new HtmlWeb();
-            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36";
+            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36";
             _productReadRepository = productReadRepository;
         }
 
@@ -38,33 +38,35 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
 
             using(var product = new Product())
             {
-                product.CurrentPrice = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span")?.InnerText.Replace("TL", String.Empty));
+                product.CurrentPrice = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen"));
                 product.Name = doc.QuerySelector("#productTitle").InnerText.Trim();
                 product.Image = doc.QuerySelector("#landingImage").Attributes["src"].Value;
                 product.StockState = doc.QuerySelector("#availability > span").InnerText.Trim();
                 product.Url = url;      
                 product.Rate = EditRate(doc.DocumentNode.SelectSingleNode("//*[@id='acrPopover']/span[1]/a/i[1]/span")?.InnerText.Split(" ")[3]);
-                product.TechnicalDetails = doc.DocumentNode.SelectNodes(@"//*[@id='feature-bullets']/ul//li").Select(li => li.InnerText).ToList<string>();
+                product.TechnicalDetails = doc.DocumentNode.SelectNodes(@"//*[@id='feature-bullets']/ul//li")?.Select(li => li.InnerText).ToList<string>();
                 product.Description = doc.QuerySelector("#productDescription > p > span")?.InnerText;
 
                 await AddAsync(product);
                 await SaveChangesAsync();
            
-                return new Response(ResponseCode.Success);
+                return new Response(ResponseCode.Success,"Product added succesfully.");
             }
             
             return null;
         }
 
-        private float? EditPrice(string value)
+
+
+        private double? EditPrice(HtmlNode value)
         {
-            if (value.Contains(",") && value.Contains("."))
+            if (value.InnerText.Contains(",") && value.InnerText.Contains("."))
             {
-                return float.Parse(value.Replace(".", string.Empty).Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+                return float.Parse(value.InnerText.Replace(".", string.Empty).Replace(",", ".").Replace("TL", String.Empty), CultureInfo.InvariantCulture.NumberFormat);
             }
-            else if (value.Contains(","))
+            else if (value.InnerText.Contains(","))
             {
-                return float.Parse(value.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+                return float.Parse(value.InnerText.Replace(",", ".").Replace("TL", String.Empty), CultureInfo.InvariantCulture.NumberFormat);
             }
             return null;
         }

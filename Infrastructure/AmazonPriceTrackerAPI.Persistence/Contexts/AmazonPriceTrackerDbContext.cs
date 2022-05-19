@@ -18,6 +18,8 @@ namespace AmazonPriceTrackerAPI.Persistence.Contexts
 
         public DbSet<TrackedProduct> TrackedProducts { get; set; } = null!;
 
+        public DbSet<Email> Emails { get; set; } = null!;
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
             // Interceptor

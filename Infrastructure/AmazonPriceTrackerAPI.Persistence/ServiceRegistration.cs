@@ -10,7 +10,9 @@ using System.Text;
 using System.Threading.Tasks;
 using AmazonPriceTrackerAPI.Application.Repositories;
 using AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets;
-using Amazon_Price_Tracker.Worker;
+using AmazonPriceTrackerAPI.Persistence.Concretes.Worker;
+using AmazonPriceTrackerAPI.Application.Repositories.MailRepo;
+using AmazonPriceTrackerAPI.Infrastructure.Concrets;
 
 namespace AmazonPriceTrackerAPI.Persistence
 {
@@ -19,13 +21,14 @@ namespace AmazonPriceTrackerAPI.Persistence
         public static void AddPersistenceServices(this IServiceCollection services) 
         {
             services.AddSingleton<Worker, Worker>();
-            services.AddHostedService<Worker>(); 
+            services.AddHostedService<Worker>();
             
             services.AddDbContext<AmazonPriceTrackerDbContext>(options => options.UseNpgsql(Configuration.ConnectionString),ServiceLifetime.Transient);
             services.AddScoped<IProductReadRepository,ProductReadRepository>();
             services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
             services.AddScoped<ITrackedProductReadRepository,TrackedProductReadRepository>();
-            services.AddTransient<ITrackedProductWriteRepository, TrackedProductWriteRepository>();    
+            services.AddScoped<ITrackedProductWriteRepository, TrackedProductWriteRepository>();
+            services.AddScoped<IMailRepository,MailRepository>();
             
         }
     }
