@@ -61,5 +61,10 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                 return query.Where(method);
             return query.Where(method).AsNoTracking();
         }
+
+        public async Task SaveChangesAsync()
+        {
+            await _context.SaveChangesAsync();
+        }
     }
 }

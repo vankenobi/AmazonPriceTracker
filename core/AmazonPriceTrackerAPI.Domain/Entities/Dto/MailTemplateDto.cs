@@ -6,12 +6,15 @@ using System.Threading.Tasks;
 
 namespace AmazonPriceTrackerAPI.Domain.Entities.Dto
 {
-    public class MailTemplateDto
+    public class MailTemplateDto : IDisposable
     {
         public double CurrentPrice { get; set; }
         public double OldPrice { get; set; }
         public double Discount { get; set; }
         public string ImagePath  { get; set; }
         public string Title { get; set; }
+
+        public void Dispose() 
+        {}
     }
 }

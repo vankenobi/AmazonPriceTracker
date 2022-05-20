@@ -45,13 +45,13 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
             while (!stoppingToken.IsCancellationRequested)
             {
                 var result = await CheckTrackingProductNextRunTime();
-                //await SendEmail(new MailTemplateDto { CurrentPrice=1905.55551 , OldPrice = 1800.0000, Discount = 105.00 ,ImagePath = "https://m.media-amazon.com/images/I/71yofUBMxSL._AC_SX679_.jpg",Title = "Apple Watch SE GPS, 40 mm Gümüş Rengi Alüminyum Kasa ve Koyu Abis Spor Kordon - Normal Boy" });
+                //await SendEmailPriceUp(new MailTemplateDto { CurrentPrice = 1905.55551, OldPrice = 1800.0000, Discount = 105.00, ImagePath = "https://m.media-amazon.com/images/I/71yofUBMxSL._AC_SX679_.jpg", Title = "Apple Watch SE GPS, 40 mm Gümüş Rengi Alüminyum Kasa ve Koyu Abis Spor Kordon - Normal Boy" });
                 await deneme(result);
                 await Task.Delay(10000);
             }
         }
 
-        public async Task<List<CheckTrackingProductDto>> CheckTrackingProductNextRunTime() 
+        public async Task<List<CheckTrackingProductDto>> CheckTrackingProductNextRunTime()
         {
             var products = await _productReadRepository.GetAllAsync();
             var trackedProducts = await _trackedProductReadRepository.GetAllAsync();
@@ -63,12 +63,10 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
             return result;
         }
 
-        public async Task deneme(List<CheckTrackingProductDto> result) 
+        public async Task deneme(List<CheckTrackingProductDto> result)
         {
             if (result != null)
             {
-                List<string> runned = new List<string>();
-
                 foreach (var item in result)
                 {
                     HtmlDocument doc = await _htmlWeb.LoadFromWebAsync(item.Url);
@@ -76,79 +74,131 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                     var price = EditPrice(doc.DocumentNode.SelectSingleNode("//*[@id='corePrice_feature_div']/div/span/span[1]").InnerText.Replace("TL", string.Empty));
 
                     // Get TrackedProduct and product by ids
-                    var trackedProduct = await _trackedProductReadRepository.GetSingleAsync(x => x.Id == item.TrackingId, true);
-                    var product = await _productReadRepository.GetSingleAsync(x => x.Id == item.ProductId, true);
-
+                    TrackedProduct trackedProduct = await _trackedProductReadRepository.GetSingleAsync(x => x.Id == item.TrackingId, true);
+                    Product product = await _productReadRepository.GetSingleAsync(x => x.Id == item.ProductId, true);
+                    
                     if (trackedProduct.CurrentPrice != price)
                     {
-                        if (trackedProduct.TargetPrice > price)
+                        if (trackedProduct.TargetPrice > price) 
                         {
+                            double oldPrice = (double)product.CurrentPrice;
+                            trackedProduct.PriceChange = price - oldPrice;
                             trackedProduct.CurrentPrice = price;
                             product.CurrentPrice = price;
                             trackedProduct.MailSendingDate = DateTime.Now.Date;
-
-                            trackedProduct.PriceChange = price - trackedProduct.CurrentPrice;
-
                             trackedProduct.PriceHistory = trackedProduct.PriceHistory.Append(string.Format("{0}-{1}", DateTime.Now.ToString(), price.ToString())).ToArray();
                             trackedProduct.NextRunTime = DateTime.Now.AddMinutes(trackedProduct.Interval);
 
-                            runned.Append(string.Format("Tracked for tracking id: {0}", item.TrackingId));
+                            MailTemplateDto mailTemplateDto = new()
+                            {
+                                CurrentPrice = trackedProduct.CurrentPrice,
+                                Discount = trackedProduct.PriceChange,
+                                ImagePath = product.Image,
+                                OldPrice = (double)oldPrice,
+                                Title = product.Name
+                            };
+
+                            await SendEmailPriceDown(mailTemplateDto);
+                            mailTemplateDto.Dispose();
 
                             _logger.LogInformation("Ürünün fiyatı düştü.");
-
-                            await _context.SaveChangesAsync();
                         }
                         else if (trackedProduct.CurrentPrice < price)
                         {
+                            double oldPrice = (double)product.CurrentPrice;
+                            trackedProduct.PriceChange = oldPrice - price;
                             trackedProduct.CurrentPrice = price;
                             product.CurrentPrice = price;
-
-                            trackedProduct.PriceChange = price - trackedProduct.CurrentPrice;
-
+                            trackedProduct.MailSendingDate = DateTime.Now.Date;
                             trackedProduct.PriceHistory = trackedProduct.PriceHistory.Append(string.Format("{0}-{1}", DateTime.Now.ToString(), price.ToString())).ToArray();
                             trackedProduct.NextRunTime = DateTime.Now.AddMinutes(trackedProduct.Interval);
 
-                            _logger.LogInformation("Ürünün fiyatı yükseldi.");
+                            MailTemplateDto mailTemplateDto = new()
+                            {
+                                CurrentPrice = trackedProduct.CurrentPrice,
+                                Discount = trackedProduct.PriceChange,
+                                ImagePath = product.Image,
+                                OldPrice = (double)oldPrice,
+                                Title = product.Name
+                            };
 
+                            await SendEmailPriceUp(mailTemplateDto);
                             await _context.SaveChangesAsync();
+
+                            mailTemplateDto.Dispose();
+                            _logger.LogInformation("Ürünün fiyatı yükseldi.");  
                         }
+
+                        _trackedProductReadRepository.SaveChangesAsync();
+                        _productReadRepository.SaveChangesAsync();
                     }
                 }
             }
             _logger.LogInformation("logger runned succesfully.");
         }
 
-        public async Task SendEmail(MailTemplateDto mailTemplateDto) 
+        public async Task SendEmailPriceUp(MailTemplateDto mailTemplateDto)
         {
             MailMessage mailMessage = new MailMessage
             {
                 From = new MailAddress("pricetrackerappforamazon@gmail.com")
             };
 
-            var emailList = await _context.Set<Email>().AsNoTracking().ToListAsync();
+            var emailList = await _context.Set<Email>().Select(x => x.MailAddress).AsNoTracking().ToListAsync();
+            var template = await File.ReadAllTextAsync(Directory.GetCurrentDirectory() + "../../../Infrastructure/AmazonPriceTrackerAPI.Infrastructure/HtmlTemplates/ProductPriceUp.html");
 
-            foreach (var email in emailList) 
+            HtmlDocument htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(template);
+
+            htmlDocument.GetElementbyId("product-img").SetAttributeValue("src", mailTemplateDto.ImagePath);
+            htmlDocument.GetElementbyId("old-price").InnerHtml = Math.Round(mailTemplateDto.OldPrice, 2).ToString("N2");
+            htmlDocument.GetElementbyId("new-price").InnerHtml = Math.Round(mailTemplateDto.CurrentPrice, 2).ToString("N2");
+            htmlDocument.GetElementbyId("discount").InnerHtml = Math.Round(mailTemplateDto.Discount, 2).ToString("N2");
+            htmlDocument.GetElementbyId("product-title").InnerHtml = mailTemplateDto.Title;
+
+            mailMessage.Subject = "The Price Of The Product Has Risen";
+            mailMessage.IsBodyHtml = true;
+            mailMessage.Body = htmlDocument.DocumentNode.OuterHtml;
+
+            foreach (var item in emailList)
             {
-                var template = await File.ReadAllTextAsync(Directory.GetCurrentDirectory() + "../../../Infrastructure/AmazonPriceTrackerAPI.Infrastructure/HtmlTemplates/ProductPriceDown.html");
-                var priceTrackerLogo = "https://drive.google.com/uc?export=view&id=1hzF_9nXM8s4oOLTh93u7u2Qy8motEBmd";
-                
-                HtmlDocument htmlDocument = new HtmlDocument();
-                htmlDocument.LoadHtml(template);
-                htmlDocument.GetElementbyId("product-img").SetAttributeValue("src", mailTemplateDto.ImagePath);
-                htmlDocument.GetElementbyId("price-tracker-logo").SetAttributeValue("src", priceTrackerLogo);
-
-                htmlDocument.GetElementbyId("old-price").InnerHtml = Math.Round(mailTemplateDto.OldPrice, 2).ToString();
-                htmlDocument.GetElementbyId("new-price").InnerHtml = Math.Round(mailTemplateDto.CurrentPrice, 2).ToString();
-                htmlDocument.GetElementbyId("discount").InnerHtml = Math.Round(mailTemplateDto.Discount, 2).ToString();
-                htmlDocument.GetElementbyId("product-title").InnerHtml = mailTemplateDto.Title;
-                
-                mailMessage.Subject = "Amazon Price Tracker App";
-                mailMessage.IsBodyHtml = true;
-                mailMessage.Body = htmlDocument.DocumentNode.OuterHtml;
-                mailMessage.To.Add(email.MailAddress);
-                await _mailRepository.SendAnEmailAsync(mailMessage);
+                mailMessage.To.Add(item);
             }
-            
+
+            await _mailRepository.SendAnEmailAsync(mailMessage);
+        }
+
+        public async Task SendEmailPriceDown(MailTemplateDto mailTemplateDto)
+        {
+            MailMessage mailMessage = new MailMessage
+            {
+                From = new MailAddress("pricetrackerappforamazon@gmail.com")
+            };
+
+            var emailList = await _context.Set<Email>().Select(x => x.MailAddress).AsNoTracking().ToListAsync();
+
+            var template = await File.ReadAllTextAsync(Directory.GetCurrentDirectory() + "../../../Infrastructure/AmazonPriceTrackerAPI.Infrastructure/HtmlTemplates/ProductPriceDown.html");
+
+            HtmlDocument htmlDocument = new HtmlDocument();
+            htmlDocument.LoadHtml(template);
+            htmlDocument.GetElementbyId("product-img").SetAttributeValue("src", mailTemplateDto.ImagePath);
+
+            htmlDocument.GetElementbyId("old-price").InnerHtml = Math.Round(mailTemplateDto.OldPrice, 2).ToString("N2");
+            htmlDocument.GetElementbyId("new-price").InnerHtml = Math.Round(mailTemplateDto.CurrentPrice, 2).ToString("N2");
+            htmlDocument.GetElementbyId("discount").InnerHtml = Math.Round(mailTemplateDto.Discount, 2).ToString("N2");
+            htmlDocument.GetElementbyId("product-title").InnerHtml = mailTemplateDto.Title;
+
+            mailMessage.Subject = "The Price Of The Product Has Dropped";
+            mailMessage.IsBodyHtml = true;
+            mailMessage.Body = htmlDocument.DocumentNode.OuterHtml;
+
+            foreach (var item in emailList)
+            {
+                mailMessage.To.Add(item);
+            }
+
+            await _mailRepository.SendAnEmailAsync(mailMessage);
+
         }
         /*
 

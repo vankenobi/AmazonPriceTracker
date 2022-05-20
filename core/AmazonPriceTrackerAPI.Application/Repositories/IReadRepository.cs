@@ -15,5 +15,6 @@ namespace AmazonPriceTrackerAPI.Application.Repositories
         IQueryable<T> GetWhere(Expression<Func<T,bool>> method, bool tracking = false);
         Task<T> GetSingleAsync(Expression<Func<T, bool>> method, bool tracking = false);
         Task<T> GetByIdAsync(int id, bool tracking = false);
+        Task SaveChangesAsync();
     }
 }

@@ -26,6 +26,8 @@ namespace AmazonPriceTrackerAPI.Infrastructure.Concrets
             ReadMailSettings();
         }
 
+        
+
         public void SetMailSettings(MailSetting mailSetting)
         {
             var appSettingsPath = Path.Combine(System.IO.Directory.GetCurrentDirectory() + "../../../Presentation/Amazon Price Tracker", "appsettings.json");
@@ -67,7 +69,6 @@ namespace AmazonPriceTrackerAPI.Infrastructure.Concrets
 
         public async Task<Response> SendAnEmailAsync(MailMessage mailMessage)
         {
-            //ReadMailSettings();
             await _smtpClient.SendMailAsync(mailMessage);
             return new Response(ResponseCode.Success, "Mail başarılı bir şekilde gönderildi.");
         }
