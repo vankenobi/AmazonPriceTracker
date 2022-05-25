@@ -25,13 +25,13 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
         private readonly IProductReadRepository _productReadRepository;
         private readonly AmazonPriceTrackerDbContext _context;
         int counter = 0;
-
+        int counter2 = 0;
         public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _provider = serviceProvider;
             _htmlWeb = new HtmlWeb();
-            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
+           // _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
             
             IServiceScope scope = _provider.CreateScope();
 
@@ -47,8 +47,8 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
             {
                 var result = await CheckTrackingProductNextRunTime();
                 counter++;
-                _logger.LogInformation(counter.ToString());
-                await deneme(result);
+                _logger.LogInformation("Step : " + counter.ToString());
+                await RunTasks(result);
                 var rand = new Random();
                 await Task.Delay(rand.Next(5 * 60000, 7 * 60000));
             }
@@ -62,12 +62,13 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
             var result = (from p in products
                           join t in trackedProducts on p.Id equals t.ProductId
                           where t.NextRunTime < DateTime.Now
-                          select new CheckTrackingProductDto { TrackingId = t.Id, ProductId = p.Id, Url = p.Url }).Reverse().ToList();
+                          select new CheckTrackingProductDto { TrackingId = t.Id, ProductId = p.Id, Url = p.Url }).ToList();
             return result;
         }
 
-        public async Task deneme(List<CheckTrackingProductDto> result)
+        public async Task RunTasks(List<CheckTrackingProductDto> result)
         {
+            counter2 += result.Count;
             if (result != null)
             {
                 foreach (var item in result)
@@ -75,13 +76,16 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                     HtmlDocument doc = await _htmlWeb.LoadFromWebAsync(item.Url);
                     // Read the price from webpage of product
                     var random = new Random();
-                    await Task.Delay(random.Next(1000, 10000));
+                    await Task.Delay(random.Next(1000, 15000));
                     var price = EditPrice(doc.DocumentNode.SelectSingleNode("//*[@id='corePrice_feature_div']/div/span/span[1]").InnerText.Replace("TL", string.Empty));
 
                     // Get TrackedProduct and product by ids
                     TrackedProduct trackedProduct = await _trackedProductReadRepository.GetSingleAsync(x => x.Id == item.TrackingId, true);
                     Product product = await _productReadRepository.GetSingleAsync(x => x.Id == item.ProductId, true);
+                    trackedProduct.NextRunTime = DateTime.Now.AddMinutes(trackedProduct.Interval);
+                    await _trackedProductReadRepository.SaveChangesAsync();
                     
+                    _logger.LogInformation(counter2 + " kez çalıştı.");
                     if (trackedProduct.CurrentPrice != price)
                     {
                         if (trackedProduct.TargetPrice > price) 
@@ -92,8 +96,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                             product.CurrentPrice = price;
                             trackedProduct.MailSendingDate = DateTime.Now.Date;
                             trackedProduct.PriceHistory = trackedProduct.PriceHistory.Append(string.Format("{0}-{1}", DateTime.Now.ToString(), price.ToString())).ToArray();
-                            trackedProduct.NextRunTime = DateTime.Now.AddMinutes(trackedProduct.Interval);
-
+                            
                             MailTemplateDto mailTemplateDto = new()
                             {
                                 CurrentPrice = trackedProduct.CurrentPrice,
@@ -108,6 +111,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
 
                             _logger.LogInformation("Ürünün fiyatı düştü.");
                         }
+
                         else if (trackedProduct.CurrentPrice < price)
                         {
                             double oldPrice = (double)product.CurrentPrice;
@@ -116,8 +120,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                             product.CurrentPrice = price;
                             trackedProduct.MailSendingDate = DateTime.Now.Date;
                             trackedProduct.PriceHistory = trackedProduct.PriceHistory.Append(string.Format("{0}-{1}", DateTime.Now.ToString(), price.ToString())).ToArray();
-                            trackedProduct.NextRunTime = DateTime.Now.AddMinutes(trackedProduct.Interval);
-
+                            
                             MailTemplateDto mailTemplateDto = new()
                             {
                                 CurrentPrice = trackedProduct.CurrentPrice,
