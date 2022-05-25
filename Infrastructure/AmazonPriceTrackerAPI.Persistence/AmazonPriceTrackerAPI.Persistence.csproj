@@ -31,5 +31,9 @@
     <ProjectReference Include="..\..\core\AmazonPriceTrackerAPI.Application\AmazonPriceTrackerAPI.Application.csproj" />
     <ProjectReference Include="..\AmazonPriceTrackerAPI.Infrastructure\AmazonPriceTrackerAPI.Infrastructure.csproj" />
   </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Migrations\" />
+  </ItemGroup>
   
 </Project>

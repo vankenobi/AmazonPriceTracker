@@ -14,5 +14,11 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
         public TrackedProductReadRepository(AmazonPriceTrackerDbContext context) : base(context)
         {
         }
+
+        public async Task<Array> GetLastPricesByProductId(int id) 
+        {
+            var priceHistory = await GetByIdAsync(id);
+            return priceHistory.PriceHistory;
+        }
     }
 }

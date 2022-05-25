@@ -24,14 +24,15 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
         private readonly ITrackedProductReadRepository _trackedProductReadRepository;
         private readonly IProductReadRepository _productReadRepository;
         private readonly AmazonPriceTrackerDbContext _context;
+        int counter = 0;
 
         public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _provider = serviceProvider;
             _htmlWeb = new HtmlWeb();
-            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36";
-
+            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
+            
             IServiceScope scope = _provider.CreateScope();
 
             _context = scope.ServiceProvider.GetRequiredService<AmazonPriceTrackerDbContext>();
@@ -45,9 +46,11 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
             while (!stoppingToken.IsCancellationRequested)
             {
                 var result = await CheckTrackingProductNextRunTime();
-                //await SendEmailPriceUp(new MailTemplateDto { CurrentPrice = 1905.55551, OldPrice = 1800.0000, Discount = 105.00, ImagePath = "https://m.media-amazon.com/images/I/71yofUBMxSL._AC_SX679_.jpg", Title = "Apple Watch SE GPS, 40 mm Gümüş Rengi Alüminyum Kasa ve Koyu Abis Spor Kordon - Normal Boy" });
+                counter++;
+                _logger.LogInformation(counter.ToString());
                 await deneme(result);
-                await Task.Delay(10000);
+                var rand = new Random();
+                await Task.Delay(rand.Next(5 * 60000, 7 * 60000));
             }
         }
 
@@ -59,7 +62,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
             var result = (from p in products
                           join t in trackedProducts on p.Id equals t.ProductId
                           where t.NextRunTime < DateTime.Now
-                          select new CheckTrackingProductDto { TrackingId = t.Id, ProductId = p.Id, Url = p.Url }).ToList();
+                          select new CheckTrackingProductDto { TrackingId = t.Id, ProductId = p.Id, Url = p.Url }).Reverse().ToList();
             return result;
         }
 
@@ -71,6 +74,8 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                 {
                     HtmlDocument doc = await _htmlWeb.LoadFromWebAsync(item.Url);
                     // Read the price from webpage of product
+                    var random = new Random();
+                    await Task.Delay(random.Next(1000, 10000));
                     var price = EditPrice(doc.DocumentNode.SelectSingleNode("//*[@id='corePrice_feature_div']/div/span/span[1]").InnerText.Replace("TL", string.Empty));
 
                     // Get TrackedProduct and product by ids

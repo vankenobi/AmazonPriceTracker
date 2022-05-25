@@ -22,7 +22,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                                       IProductReadRepository productReadRepository) : base(context)
         {
             _htmlWeb = new HtmlWeb();
-            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.54 Safari/537.36";
+            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
             _productReadRepository = productReadRepository;
         }
 
