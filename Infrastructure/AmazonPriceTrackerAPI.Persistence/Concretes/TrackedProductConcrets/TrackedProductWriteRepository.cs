@@ -61,7 +61,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
             {
                 trackedProduct.ProductId = product.Id;
                 trackedProduct.Interval = addTrackingProductDto.Interval;
-                trackedProduct.CurrentPrice = price;
+                trackedProduct.CurrentPrice = Math.Round(price,2);
                 trackedProduct.TargetPrice = addTrackingProductDto.TargetPrice;
                 trackedProduct.PriceHistory = new string[] { String.Format("{0}-{1}", DateTime.Now.ToString(), price.ToString()) };
                 trackedProduct.NextRunTime = DateTime.Now.AddMinutes(addTrackingProductDto.Interval);

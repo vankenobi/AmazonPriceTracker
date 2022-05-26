@@ -1,4 +1,5 @@
 ﻿using AmazonPriceTrackerAPI.Application.Repositories;
+using AmazonPriceTrackerAPI.Domain.Entities;
 using AmazonPriceTrackerAPI.Domain.Shared.Concret;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,8 +27,11 @@ namespace Amazon_Price_Tracker.Controllers
             return await _productWriteRepository.AddNewProductWithUrl(url);
         }
 
-
-
+        [HttpGet]
+        [Route("GetAllProducts")]
+        public async Task<Response<List<Product>>> GetAllProducts() {
+            return await _productReadRepository.GetAllProducts();
+        }
 
     }
 }

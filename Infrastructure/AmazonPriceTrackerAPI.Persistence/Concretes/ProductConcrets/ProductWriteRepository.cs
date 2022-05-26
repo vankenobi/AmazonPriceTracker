@@ -22,7 +22,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                                       IProductReadRepository productReadRepository) : base(context)
         {
             _htmlWeb = new HtmlWeb();
-            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
+            //_htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
             _productReadRepository = productReadRepository;
         }
 
@@ -62,20 +62,24 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
         {
             if (value.InnerText.Contains(",") && value.InnerText.Contains("."))
             {
-                return float.Parse(value.InnerText.Replace(".", string.Empty).Replace(",", ".").Replace("TL", String.Empty), CultureInfo.InvariantCulture.NumberFormat);
+                return Math.Round(double.Parse(value.InnerText.Replace(".", string.Empty).Replace(",", ".").Replace("TL", String.Empty), CultureInfo.InvariantCulture.NumberFormat),2);
             }
             else if (value.InnerText.Contains(","))
             {
-                return float.Parse(value.InnerText.Replace(",", ".").Replace("TL", String.Empty), CultureInfo.InvariantCulture.NumberFormat);
+                return Math.Round(double.Parse(value.InnerText.Replace(",", ".").Replace("TL", String.Empty), CultureInfo.InvariantCulture.NumberFormat),2);
             }
             return null;
         }
 
         private double? EditRate(string value) 
         {
+            if (value == null) 
+            {
+                return null;
+            }
             if (value.Contains(","))
             {
-                return float.Parse(value.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
+                return double.Parse(value.Replace(",", "."), CultureInfo.InvariantCulture.NumberFormat);
             }
             return null;
         }

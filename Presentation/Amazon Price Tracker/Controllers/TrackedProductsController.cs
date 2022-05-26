@@ -1,4 +1,5 @@
 ﻿using AmazonPriceTrackerAPI.Application.Repositories;
+using AmazonPriceTrackerAPI.Domain.Entities;
 using AmazonPriceTrackerAPI.Domain.Entities.Dto;
 using AmazonPriceTrackerAPI.Domain.Shared.Concret;
 using Microsoft.AspNetCore.Mvc;
@@ -12,9 +13,13 @@ namespace Amazon_Price_Tracker.Controllers
     public class TrackedProductsController : ControllerBase
     {
         private readonly ITrackedProductWriteRepository _trackedProductWriteRepository;
-        public TrackedProductsController(ITrackedProductWriteRepository trackedProductWriteRepository)
+        private readonly ITrackedProductReadRepository _trackedProductReadRepository;
+
+        public TrackedProductsController(ITrackedProductWriteRepository trackedProductWriteRepository,
+                                         ITrackedProductReadRepository trackedProductReadRepository)
         {
             _trackedProductWriteRepository = trackedProductWriteRepository;
+            _trackedProductReadRepository = trackedProductReadRepository;
         }
 
         [HttpPost]
@@ -24,6 +29,21 @@ namespace Amazon_Price_Tracker.Controllers
             return await _trackedProductWriteRepository.AddProductTracking(addProductTrackingDto);
         }
 
-        
+        [HttpGet]
+        [Route("GetAllTrackedProduct")]
+        public async Task<Response<List<TrackedProduct>>> GetAllTrackedProduct() {
+            return await _trackedProductReadRepository.GetAllTrackedProducts();
+        }
+
+
+
+        [HttpGet]
+        [Route("deneme")]
+        public  string deneme()
+        {
+            return "deneme";
+        }
+
+
     }
 }
