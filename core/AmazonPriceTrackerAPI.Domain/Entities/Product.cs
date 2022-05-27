@@ -25,7 +25,6 @@ namespace AmazonPriceTrackerAPI.Domain.Entities
 
         public List<string>? TechnicalDetails { get; set; }
 
-
         public void Dispose() {
             Console.WriteLine("Dispose worked.");
         }

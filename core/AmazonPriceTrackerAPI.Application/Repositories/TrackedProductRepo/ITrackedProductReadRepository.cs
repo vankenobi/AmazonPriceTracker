@@ -1,4 +1,5 @@
 ﻿using AmazonPriceTrackerAPI.Domain.Entities;
+using AmazonPriceTrackerAPI.Domain.Entities.Dto;
 using AmazonPriceTrackerAPI.Domain.Shared.Concret;
 using System;
 using System.Collections.Generic;
@@ -10,6 +11,6 @@ namespace AmazonPriceTrackerAPI.Application.Repositories
 {
     public interface ITrackedProductReadRepository : IReadRepository<TrackedProduct>
     {
-        Task<Response<List<TrackedProduct>>> GetAllTrackedProducts();
+       Task<Response<List<TrackedProductDto>>> GetAllTrackedProducts();
     }
 }

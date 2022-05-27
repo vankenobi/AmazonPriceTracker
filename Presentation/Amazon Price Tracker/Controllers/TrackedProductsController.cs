@@ -31,19 +31,8 @@ namespace Amazon_Price_Tracker.Controllers
 
         [HttpGet]
         [Route("GetAllTrackedProduct")]
-        public async Task<Response<List<TrackedProduct>>> GetAllTrackedProduct() {
+        public async Task<Response<List<TrackedProductDto>>> GetAllTrackedProduct() {
             return await _trackedProductReadRepository.GetAllTrackedProducts();
         }
-
-
-
-        [HttpGet]
-        [Route("deneme")]
-        public  string deneme()
-        {
-            return "deneme";
-        }
-
-
     }
 }

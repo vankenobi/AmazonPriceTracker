@@ -10,6 +10,6 @@ namespace AmazonPriceTrackerAPI.Application.Repositories
 {
     public interface IProductReadRepository : IReadRepository<Product>
     {
-        Task<Response<List<Product>>> GetAllProducts();
+        Task<Response<List<Product>>> GetAllProductsAsync();
     }
 }

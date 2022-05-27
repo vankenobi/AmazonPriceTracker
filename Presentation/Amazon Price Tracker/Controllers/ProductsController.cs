@@ -30,8 +30,10 @@ namespace Amazon_Price_Tracker.Controllers
         [HttpGet]
         [Route("GetAllProducts")]
         public async Task<Response<List<Product>>> GetAllProducts() {
-            return await _productReadRepository.GetAllProducts();
+            return await _productReadRepository.GetAllProductsAsync();
         }
+
+
 
     }
 }

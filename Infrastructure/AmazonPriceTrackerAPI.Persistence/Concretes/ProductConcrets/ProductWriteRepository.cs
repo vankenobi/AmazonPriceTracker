@@ -28,32 +28,40 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
 
         public async Task<Response> AddNewProductWithUrl(string url)
         {
-            HtmlDocument doc = _htmlWeb.Load(url);
-            
-            var hasValue = _productReadRepository.GetWhere(x=>x.Url == url).FirstOrDefault();
-            if (hasValue != null)
+            try
             {
-                return new Response(ResponseCode.Error,"Product already exists.");
+                HtmlDocument doc = _htmlWeb.Load(url);
+
+                var hasValue = _productReadRepository.GetWhere(x => x.Url == url).FirstOrDefault();
+                if (hasValue != null)
+                {
+                    return new Response(ResponseCode.Error, "Product already exists.");
+                }
+
+                using (var product = new Product())
+                {
+                    product.CurrentPrice = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen"));
+                    product.Name = doc.QuerySelector("#productTitle").InnerText.Trim();
+                    product.Image = doc.QuerySelector("#landingImage").Attributes["src"].Value;
+                    product.StockState = doc.QuerySelector("#availability > span").InnerText.Trim();
+                    product.Url = url;
+                    product.Rate = EditRate(doc.DocumentNode.SelectSingleNode("//*[@id='acrPopover']/span[1]/a/i[1]/span")?.InnerText.Split(" ")[3]);
+                    product.TechnicalDetails = doc.DocumentNode.SelectNodes(@"//*[@id='feature-bullets']/ul//li")?.Select(li => li.InnerText).ToList<string>();
+                    product.Description = doc.QuerySelector("#productDescription > p > span")?.InnerText;
+
+                    await AddAsync(product);
+                    await SaveChangesAsync();
+
+                    return new Response(ResponseCode.Success, "Product added succesfully.");
+                }
             }
-
-            using(var product = new Product())
+            catch (Exception)
             {
-                product.CurrentPrice = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen"));
-                product.Name = doc.QuerySelector("#productTitle").InnerText.Trim();
-                product.Image = doc.QuerySelector("#landingImage").Attributes["src"].Value;
-                product.StockState = doc.QuerySelector("#availability > span").InnerText.Trim();
-                product.Url = url;      
-                product.Rate = EditRate(doc.DocumentNode.SelectSingleNode("//*[@id='acrPopover']/span[1]/a/i[1]/span")?.InnerText.Split(" ")[3]);
-                product.TechnicalDetails = doc.DocumentNode.SelectNodes(@"//*[@id='feature-bullets']/ul//li")?.Select(li => li.InnerText).ToList<string>();
-                product.Description = doc.QuerySelector("#productDescription > p > span")?.InnerText;
-
-                await AddAsync(product);
-                await SaveChangesAsync();
-           
-                return new Response(ResponseCode.Success,"Product added succesfully.");
+                return new Response(ResponseCode.Error,"Error on adding new product.");
             }
             
-            return null;
+            
+            
         }
 
 

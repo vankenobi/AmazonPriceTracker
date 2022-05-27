@@ -17,7 +17,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
         {
         }
 
-        public async Task<Response<List<Product>>> GetAllProducts()
+        public async Task<Response<List<Product>>> GetAllProductsAsync()
         {
             try
             {
