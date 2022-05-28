@@ -30,7 +30,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
         public async Task<Response<List<TrackedProductDto>>> GetAllTrackedProducts() 
         {
             try
-            {
+            { 
                 var products = await _productReadRepository.GetAllAsync();
                 var trackedProducts = await GetAllAsync();
 
@@ -50,7 +50,8 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
                                                               TargetPrice = t.TargetPrice,
                                                               NextRunTime = t.NextRunTime,
                                                               ProductId = p.Id,
-                                                              Url = p.Url}).ToList();
+                                                              Url = p.Url,
+                                                              TechnicalDetails = p.TechnicalDetails}).ToList();
                              
 
                 return new Response<List<TrackedProductDto>>(ResponseCode.Success, result);

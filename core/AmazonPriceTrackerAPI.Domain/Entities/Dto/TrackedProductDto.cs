@@ -36,6 +36,8 @@ namespace AmazonPriceTrackerAPI.Domain.Entities.Dto
 
         public DateTime MailSendingDate { get; set; }
 
+        public List<string>? TechnicalDetails { get; set; }
+
         public double PriceChange { get; set; }
     }
 }
