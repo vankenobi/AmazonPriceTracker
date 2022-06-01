@@ -26,8 +26,6 @@ namespace AmazonPriceTrackerAPI.Infrastructure.Concrets
             ReadMailSettings();
         }
 
-        
-
         public void SetMailSettings(MailSetting mailSetting)
         {
             var appSettingsPath = Path.Combine(System.IO.Directory.GetCurrentDirectory() + "../../../Presentation/Amazon Price Tracker", "appsettings.json");

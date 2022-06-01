@@ -31,7 +31,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
             _logger = logger;
             _provider = serviceProvider;
             _htmlWeb = new HtmlWeb();
-           // _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
+           //_htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
             
             IServiceScope scope = _provider.CreateScope();
 
