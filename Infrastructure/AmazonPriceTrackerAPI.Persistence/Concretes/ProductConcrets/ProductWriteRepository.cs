@@ -35,7 +35,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                 var hasValue = _productReadRepository.GetWhere(x => x.Url == url).FirstOrDefault();
                 if (hasValue != null)
                 {
-                    return new Response(ResponseCode.Error, "Product already exists.");
+                    return new Response(ResponseCode.BadRequest, "Product already exists.");
                 }
 
                 using (var product = new Product())

@@ -125,6 +125,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                             {
                                 CurrentPrice = trackedProduct.CurrentPrice,
                                 Discount = trackedProduct.PriceChange,
+
                                 ImagePath = product.Image,
                                 OldPrice = (double)oldPrice,
                                 Title = product.Name

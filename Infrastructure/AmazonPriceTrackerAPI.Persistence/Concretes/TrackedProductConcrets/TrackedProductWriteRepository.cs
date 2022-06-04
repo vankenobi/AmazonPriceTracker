@@ -46,7 +46,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
 
             if (hasValue != null) 
             {
-                return new Response(ResponseCode.Error, "This product already been tracking.");
+                return new Response(ResponseCode.BadRequest, "This product already been tracking.");
             }
             
             HtmlDocument doc = _htmlWeb.Load(product.Url);
