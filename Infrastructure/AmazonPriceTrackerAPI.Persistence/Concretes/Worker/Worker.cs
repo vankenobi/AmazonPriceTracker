@@ -54,6 +54,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
             }
         }
 
+
         public async Task<List<CheckTrackingProductDto>> CheckTrackingProductNextRunTime()
         {
             var products = await _productReadRepository.GetAllAsync();
@@ -74,10 +75,11 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                 foreach (var item in result)
                 {
                     HtmlDocument doc = await _htmlWeb.LoadFromWebAsync(item.Url);
+                    
                     // Read the price from webpage of product
                     var random = new Random();
                     await Task.Delay(random.Next(1000, 15000));
-                    var price = EditPrice(doc.DocumentNode.SelectSingleNode("//*[@id='corePrice_feature_div']/div/span/span[1]").InnerText.Replace("TL", string.Empty));
+                    var price = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen").InnerText.Replace("TL", string.Empty));
 
                     // Get TrackedProduct and product by ids
                     TrackedProduct trackedProduct = await _trackedProductReadRepository.GetSingleAsync(x => x.Id == item.TrackingId, true);
