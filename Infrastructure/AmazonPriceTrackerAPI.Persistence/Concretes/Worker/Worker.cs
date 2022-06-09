@@ -108,7 +108,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                                 Title = product.Name
                             };
 
-                            await SendEmailPriceDown(mailTemplateDto);
+                            //await SendEmailPriceDown(mailTemplateDto);
                             mailTemplateDto.Dispose();
 
                             _logger.LogInformation("Ürünün fiyatı düştü.");
@@ -133,7 +133,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                                 Title = product.Name
                             };
 
-                            await SendEmailPriceUp(mailTemplateDto);
+                           // await SendEmailPriceUp(mailTemplateDto);
                             await _context.SaveChangesAsync();
 
                             mailTemplateDto.Dispose();

@@ -57,13 +57,14 @@ namespace AmazonPriceTrackerAPI.Infrastructure.Concrets
             jsonSettings.Converters.Add(new StringEnumConverter());
 
             dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(json, jsonSettings);
-
+          
             _smtpClient.Port = (int)(config.EmailSettings.Port);
             _smtpClient.Host = (string)(config.EmailSettings.Host);
             _smtpClient.EnableSsl = (bool)(config.EmailSettings.EnableSsl);
+            _smtpClient.UseDefaultCredentials = false;
             _smtpClient.DeliveryMethod = SmtpDeliveryMethod.Network;
             _smtpClient.Credentials = new NetworkCredential((string)(config.EmailSettings.Credentials.Username), (string)(config.EmailSettings.Credentials.Password));
-        }
+        }   
 
         public async Task<Response> SendAnEmailAsync(MailMessage mailMessage)
         {
