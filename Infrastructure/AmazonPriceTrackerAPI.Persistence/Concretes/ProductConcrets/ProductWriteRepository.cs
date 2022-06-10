@@ -17,16 +17,21 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
     {
         private readonly HtmlWeb _htmlWeb;
         private readonly IProductReadRepository _productReadRepository;
+        private readonly ITrackedProductWriteRepository _trackedProductWriteRepository;
+        private readonly ITrackedProductReadRepository _trackedProductReadRepository;
 
         public ProductWriteRepository(AmazonPriceTrackerDbContext context, 
-                                      IProductReadRepository productReadRepository) : base(context)
+                                      IProductReadRepository productReadRepository,
+                                      ITrackedProductWriteRepository trackedProductWriteRepository,
+                                      ITrackedProductReadRepository trackedProductReadRepository) : base(context)
         {
             _htmlWeb = new HtmlWeb();
-            //_htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
             _productReadRepository = productReadRepository;
+            _trackedProductWriteRepository = trackedProductWriteRepository;
+            _trackedProductReadRepository = trackedProductReadRepository;
         }
 
-        public async Task<Response> AddNewProductWithUrl(string url)
+        public async Task<Response> AddNewProductWithUrlAsync(string url)
         {
             try
             {
@@ -59,11 +64,42 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
             {
                 return new Response(ResponseCode.Error,"Error on adding new product.");
             }
-            
-            
-            
         }
 
+
+        public async Task<Response> DeleteProductAsync(int id)
+        {
+            try
+            {
+                var product = await _productReadRepository.GetSingleAsync(x => x.Id == id);
+                if (product == null)
+                {
+                    return new Response(ResponseCode.NotFound, "Product not found.");
+                }
+
+                var trackingProduct = await _trackedProductReadRepository.GetSingleAsync(x => x.ProductId == product.Id,true);
+                if (trackingProduct != null)
+                {
+                    _trackedProductWriteRepository.Remove(trackingProduct.Id);
+                }
+                var state2 = Remove(id).Result;
+                
+                if (state2 == true)
+                {
+                    await SaveChangesAsync();
+                    await _trackedProductWriteRepository.SaveChangesAsync();
+                    return new Response(ResponseCode.Success, "Product deleted succesfuly.");
+                }
+                else
+                {
+                    return new Response(ResponseCode.Error, "Error on delete");
+                }
+            }
+            catch (Exception)
+            {
+                return new Response(ResponseCode.Error, "Error on delete");
+            }
+        }
 
 
         private double? EditPrice(HtmlNode value)

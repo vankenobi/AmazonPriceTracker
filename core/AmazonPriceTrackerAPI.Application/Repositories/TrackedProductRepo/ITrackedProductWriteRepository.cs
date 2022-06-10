@@ -14,6 +14,6 @@ namespace AmazonPriceTrackerAPI.Application.Repositories
     public interface ITrackedProductWriteRepository : IWriteRepository<TrackedProduct>
     {
         Task<Response> AddProductTracking(AddProductTrackingDto addTrackingProductDto);
-
+        Task<Response> DeleteTrackingProduct(int productId);
     }
 }

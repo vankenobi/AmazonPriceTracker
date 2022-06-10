@@ -28,15 +28,13 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
                                              ITrackedProductReadRepository trackedProductReadRepository) : base(context)
         {
             _htmlWeb = new HtmlWeb();
-            _htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
             _productReadRepository = productReadRepository;
             _trackedProductReadRepository = trackedProductReadRepository;
         }
 
-
         public async Task<Response> AddProductTracking(AddProductTrackingDto addTrackingProductDto)
         {
-            var product = await _productReadRepository.GetWhere(x => x.Id == addTrackingProductDto.ProductId).FirstOrDefaultAsync();
+            var product = await _productReadRepository.GetWhere(x => x.Id == addTrackingProductDto.ProductId,true).FirstOrDefaultAsync();
             var hasValue = await _trackedProductReadRepository.GetWhere(x => x.ProductId == addTrackingProductDto.ProductId).FirstOrDefaultAsync();
 
             if (product == null)
@@ -65,13 +63,17 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
                 trackedProduct.TargetPrice = addTrackingProductDto.TargetPrice;
                 trackedProduct.PriceHistory = new string[] { String.Format("{0}-{1}", DateTime.Now.ToString(), price.ToString()) };
                 trackedProduct.NextRunTime = DateTime.Now.AddMinutes(addTrackingProductDto.Interval);
-
+                
                 await AddAsync(trackedProduct);
+                
                 var result = await SaveChangesAsync();
                 if (result == 0)
                 {
+                    
                     return new Response(ResponseCode.Error, "Error on add.");
                 }
+                product.isTracking = true;
+                _productReadRepository.SaveChangesAsync();
                 return new Response(ResponseCode.Success, "Tracked product added succesfully.");
             }
 
@@ -80,7 +82,27 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
         }
 
 
+        public async Task<Response> DeleteTrackingProduct(int productId)
+        {
+            var trackingProduct = await _trackedProductReadRepository.GetSingleAsync(x => x.ProductId == productId);
 
+            if (trackingProduct == null)
+            {
+                return new Response(ResponseCode.NotFound, "Tracking product not found");
+            }
+
+            bool state = Remove(trackingProduct);
+            if (state == true)
+            {
+                return new Response(ResponseCode.Success, "Product deleted from tracking list succesfully");
+            }
+            else
+            {
+                return new Response(ResponseCode.Error, "Error on deleting");
+            }
+
+
+        }
         
     
         

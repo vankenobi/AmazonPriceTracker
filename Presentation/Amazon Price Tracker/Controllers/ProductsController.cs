@@ -19,12 +19,18 @@ namespace Amazon_Price_Tracker.Controllers
             _productWriteRepository = productWriteRepository;
         }
 
-
         [HttpPost]
-        [Route("AddNewProductWithUrl")]
+        [Route("AddNewProductWithUrlAsync")]
         public async Task<Response> AddNewProductWithUrl([FromBody]string url) 
         {
-            return await _productWriteRepository.AddNewProductWithUrl(url);
+            return await _productWriteRepository.AddNewProductWithUrlAsync(url);
+        }
+
+        [HttpPost]
+        [Route("DeleteProductAsync")]
+        public async Task<Response> DeleteTheProduct([FromBody]int id) 
+        {
+            return await _productWriteRepository.DeleteProductAsync(id);
         }
 
         [HttpGet]

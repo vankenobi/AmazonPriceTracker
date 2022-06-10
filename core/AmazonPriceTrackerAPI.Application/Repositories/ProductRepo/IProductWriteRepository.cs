@@ -12,7 +12,7 @@ namespace AmazonPriceTrackerAPI.Application.Repositories
 {
     public interface IProductWriteRepository : IWriteRepository<Product>
     {
-        Task<Response> AddNewProductWithUrl(string url);
-
+        Task<Response> AddNewProductWithUrlAsync(string url);
+        Task<Response> DeleteProductAsync(int id);
     }
 }

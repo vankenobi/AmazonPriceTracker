@@ -23,6 +23,8 @@ namespace AmazonPriceTrackerAPI.Domain.Entities
 
         public string? Description { get; set; }
 
+        public bool isTracking { get; set; } = false;
+
         public List<string>? TechnicalDetails { get; set; }
 
         public void Dispose() {
