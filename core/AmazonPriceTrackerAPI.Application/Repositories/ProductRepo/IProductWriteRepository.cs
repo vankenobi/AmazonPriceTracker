@@ -14,5 +14,6 @@ namespace AmazonPriceTrackerAPI.Application.Repositories
     {
         Task<Response> AddNewProductWithUrlAsync(string url);
         Task<Response> DeleteProductAsync(int id);
+        Task<Response> ChangeFavoriteStateAsync(int productId);
     }
 }

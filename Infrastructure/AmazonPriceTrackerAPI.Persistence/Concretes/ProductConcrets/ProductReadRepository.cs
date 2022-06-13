@@ -22,7 +22,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
             try
             {
                 List<Product> products = await GetAllAsync();
-                return new Response<List<Product>>(ResponseCode.Success, products);
+                return new Response<List<Product>>(ResponseCode.Success, products.OrderBy(x=>x.Name).ToList());
             }
             catch (Exception)
             {

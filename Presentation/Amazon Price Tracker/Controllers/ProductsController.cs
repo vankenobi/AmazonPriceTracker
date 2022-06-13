@@ -21,14 +21,14 @@ namespace Amazon_Price_Tracker.Controllers
 
         [HttpPost]
         [Route("AddNewProductWithUrlAsync")]
-        public async Task<Response> AddNewProductWithUrl([FromBody]string url) 
+        public async Task<Response> AddNewProductWithUrl([FromBody] string url)
         {
             return await _productWriteRepository.AddNewProductWithUrlAsync(url);
         }
 
         [HttpPost]
         [Route("DeleteProductAsync")]
-        public async Task<Response> DeleteTheProduct([FromBody]int id) 
+        public async Task<Response> DeleteTheProduct([FromBody] int id)
         {
             return await _productWriteRepository.DeleteProductAsync(id);
         }
@@ -39,6 +39,12 @@ namespace Amazon_Price_Tracker.Controllers
             return await _productReadRepository.GetAllProductsAsync();
         }
 
+        [HttpPut]
+        [Route("EditFavoriteStateAsync")]
+        public async Task<Response> EditFavoriteStateAsync([FromBody] int productId) 
+        {
+            return await _productWriteRepository.ChangeFavoriteStateAsync(productId);
+        }
 
 
     }

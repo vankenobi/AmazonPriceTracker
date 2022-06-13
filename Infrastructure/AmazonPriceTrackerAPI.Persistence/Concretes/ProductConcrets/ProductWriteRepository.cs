@@ -101,6 +101,35 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
             }
         }
 
+        public async Task<Response> ChangeFavoriteStateAsync(int productId) 
+        {
+            try
+            {
+                var productEntity = await _productReadRepository.GetSingleAsync(x => x.Id == productId, true);
+                if (productEntity == null)
+                {
+                    return new Response(ResponseCode.NotFound, "Product not found");
+                }
+
+                productEntity.isFavorite = productEntity.isFavorite == false ? true : false;
+                
+                var state = Update(productEntity);
+                await SaveChangesAsync();
+
+                if (state == true)
+                {
+                    return new Response(ResponseCode.Success, "The product updated succesfully");
+                }
+                return new Response(ResponseCode.Error, "Error on update.");
+            }
+            catch (Exception)
+            {
+                return new Response(ResponseCode.Error, "Error on update.");
+            }
+            
+           
+        }
+
 
         private double? EditPrice(HtmlNode value)
         {
