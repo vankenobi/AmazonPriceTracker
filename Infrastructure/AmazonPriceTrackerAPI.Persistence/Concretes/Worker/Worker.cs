@@ -67,6 +67,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
             return result;
         }
 
+        // will catch error expections 
         public async Task RunTasks(List<CheckTrackingProductDto> result)
         {
             counter2 += result.Count;
