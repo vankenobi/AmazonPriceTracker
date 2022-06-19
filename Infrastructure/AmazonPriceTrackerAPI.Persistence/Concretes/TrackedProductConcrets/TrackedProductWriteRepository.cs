@@ -100,12 +100,33 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
             {
                 return new Response(ResponseCode.Error, "Error on deleting");
             }
-
-
         }
-        
-    
-        
+
+        public async Task<Response> UpdateTrackedProductIntervalAndTargetPrice  (TrackingProductPriceAndIntervalDto trackingProductPriceAndIntervalDto)
+        {
+            try
+            {
+                var entity = await _trackedProductReadRepository.GetSingleAsync(x => x.ProductId == trackingProductPriceAndIntervalDto.ProductId, true);
+                if (entity == null)
+                {
+                    return new Response(ResponseCode.NotFound, "Product not found.");
+                }
+
+                entity.TargetPrice = trackingProductPriceAndIntervalDto.TargetPrice;
+                entity.Interval = trackingProductPriceAndIntervalDto.Interval;
+
+                await _trackedProductReadRepository.SaveChangesAsync();
+
+                return new Response(ResponseCode.Success, "Tracked product target price and interval time updated.");
+            }
+            catch (Exception)
+            {
+                return new Response(ResponseCode.Error, "Error on updating");
+            }
+        }
+
+
+
 
         private double EditPrice(string value)
         {
