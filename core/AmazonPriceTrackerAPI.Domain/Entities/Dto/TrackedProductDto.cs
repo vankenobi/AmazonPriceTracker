@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace AmazonPriceTrackerAPI.Domain.Entities.Dto
 {
-    public class TrackedProductDto
+    public class TrackedProductDto : IDisposable
     {
         public int ProductId { get; set; }
 
@@ -39,5 +39,7 @@ namespace AmazonPriceTrackerAPI.Domain.Entities.Dto
         public List<string>? TechnicalDetails { get; set; }
 
         public double PriceChange { get; set; }
+
+        public void Dispose() {}
     }
 }

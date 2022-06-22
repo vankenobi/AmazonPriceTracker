@@ -62,8 +62,40 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
             }
         }
 
+        public async Task<Response<TrackedProductDto>> GetTrackedProductByProductId(int productId) 
+        {
+            try
+            {
+                var entity = await GetSingleAsync(x => x.ProductId == productId);
+                if (entity == null) 
+                {
+                    return new Response<TrackedProductDto>(ResponseCode.NotFound, "Product tracking settings not found");
+                }
+                var trackedProductDto = new TrackedProductDto
+                {
+                    ProductId = entity.ProductId,
+                    CurrentPrice = entity.CurrentPrice,
+                    TargetPrice = entity.TargetPrice,
+                    Interval = entity.Interval,
+                    MailSendingDate = entity.MailSendingDate,
+                    PriceChange = entity.PriceChange,
+                    PriceHistory = entity.PriceHistory,
+                    NextRunTime = entity.NextRunTime,
+                    ProductTrackedId = entity.Id,
 
-        
-        
+                };
+                return new Response<TrackedProductDto>(ResponseCode.Success, trackedProductDto);
+            }
+            catch (Exception)
+            {
+                return new Response<TrackedProductDto>(ResponseCode.Error, "Error on get the tracked product");
+            }
+            
+        }
+
+
+
+
+
     }
 }

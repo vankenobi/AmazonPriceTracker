@@ -40,5 +40,11 @@ namespace Amazon_Price_Tracker.Controllers
         public async Task<Response> UpdateTrackedProductIntervalAndTargetPrice(TrackingProductPriceAndIntervalDto trackingProductPriceAndIntervalDto) {
             return await _trackedProductWriteRepository.UpdateTrackedProductIntervalAndTargetPrice(trackingProductPriceAndIntervalDto);
         }
+
+        [HttpPost]
+        [Route("GetTrackedProductByProductIdAsync")]
+        public async Task<Response<TrackedProductDto>> GetTrackedProductByProductIdAsync([FromBody]int productId) {
+            return await _trackedProductReadRepository.GetTrackedProductByProductId(productId);
+        }
     }
 }

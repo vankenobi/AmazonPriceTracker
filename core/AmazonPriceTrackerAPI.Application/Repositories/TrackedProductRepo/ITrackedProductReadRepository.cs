@@ -12,5 +12,6 @@ namespace AmazonPriceTrackerAPI.Application.Repositories
     public interface ITrackedProductReadRepository : IReadRepository<TrackedProduct>
     {
        Task<Response<List<TrackedProductDto>>> GetAllTrackedProducts();
+       Task<Response<TrackedProductDto>> GetTrackedProductByProductId(int productId);
     }
 }
