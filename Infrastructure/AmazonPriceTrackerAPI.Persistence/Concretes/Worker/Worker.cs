@@ -50,7 +50,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                 _logger.LogInformation("Step : " + counter.ToString());
                 await RunTasks(result);
                 var rand = new Random();
-                await Task.Delay(rand.Next(5 * 60000, 7 * 60000));
+                //await Task.Delay(rand.Next(5 * 60000, 7 * 60000));
             }
         }
 
@@ -79,7 +79,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                     
                     // Read the price from webpage of product
                     var random = new Random();
-                    await Task.Delay(random.Next(1000, 15000));
+                    //await Task.Delay(random.Next(1000, 15000));
                     var price = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen").InnerText.Replace("TL", string.Empty));
 
                     // Get TrackedProduct and product by ids
@@ -91,7 +91,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                     _logger.LogInformation(counter2 + " kez çalıştı.");
                     if (trackedProduct.CurrentPrice != price)
                     {
-                        if (trackedProduct.TargetPrice > price) 
+                        if (trackedProduct.TargetPrice > price)
                         {
                             double oldPrice = (double)product.CurrentPrice;
                             trackedProduct.PriceChange = price - oldPrice;
@@ -99,7 +99,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                             product.CurrentPrice = price;
                             trackedProduct.MailSendingDate = DateTime.Now.Date;
                             trackedProduct.PriceHistory = trackedProduct.PriceHistory.Append(string.Format("{0}-{1}", DateTime.Now.ToString(), price.ToString())).ToArray();
-                            
+
                             MailTemplateDto mailTemplateDto = new()
                             {
                                 CurrentPrice = trackedProduct.CurrentPrice,
@@ -123,7 +123,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                             product.CurrentPrice = price;
                             trackedProduct.MailSendingDate = DateTime.Now.Date;
                             trackedProduct.PriceHistory = trackedProduct.PriceHistory.Append(string.Format("{0}-{1}", DateTime.Now.ToString(), price.ToString())).ToArray();
-                            
+
                             MailTemplateDto mailTemplateDto = new()
                             {
                                 CurrentPrice = trackedProduct.CurrentPrice,
@@ -134,15 +134,25 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                                 Title = product.Name
                             };
 
-                           // await SendEmailPriceUp(mailTemplateDto);
+                            // await SendEmailPriceUp(mailTemplateDto);
                             await _context.SaveChangesAsync();
 
                             mailTemplateDto.Dispose();
-                            _logger.LogInformation("Ürünün fiyatı yükseldi.");  
+                            _logger.LogInformation("Ürünün fiyatı yükseldi.");
                         }
 
-                        _trackedProductReadRepository.SaveChangesAsync();
-                        _productReadRepository.SaveChangesAsync();
+                        else if (trackedProduct.CurrentPrice > price) 
+                        {
+                            double oldPrice = (double)product.CurrentPrice;
+                            trackedProduct.PriceChange = oldPrice - price;
+                            trackedProduct.CurrentPrice = price;
+                            product.CurrentPrice = price;
+                            trackedProduct.MailSendingDate = DateTime.Now.Date;
+                            trackedProduct.PriceHistory = trackedProduct.PriceHistory.Append(string.Format("{0}-{1}", DateTime.Now.ToString(), price.ToString())).ToArray();
+                        }
+
+                        await _trackedProductReadRepository.SaveChangesAsync();
+                        await _productReadRepository.SaveChangesAsync();
                     }
                 }
             }
