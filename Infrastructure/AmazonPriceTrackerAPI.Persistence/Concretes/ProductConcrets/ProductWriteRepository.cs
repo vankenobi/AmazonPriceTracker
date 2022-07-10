@@ -46,7 +46,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                 using (var product = new Product())
                 {
                     var price = doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen");
-                    if (price == null)
+                    if (price.InnerText == null)
                         return new Response(ResponseCode.Error, "Error on adding new product.");
                     product.CurrentPrice = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen"));
                     product.Name = doc.QuerySelector("#productTitle").InnerText.Trim();
