@@ -16,5 +16,6 @@ namespace AmazonPriceTrackerAPI.Application.Repositories
         Task<Response> AddProductTracking(AddProductTrackingDto addTrackingProductDto);
         Task<Response> DeleteTrackingProduct(int productId);
         Task<Response> UpdateTrackedProductIntervalAndTargetPrice(TrackingProductPriceAndIntervalDto trackingProductPriceAndIntervalDto);
+
     }
 }

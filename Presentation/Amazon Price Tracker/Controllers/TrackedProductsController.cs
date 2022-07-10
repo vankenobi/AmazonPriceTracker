@@ -46,5 +46,12 @@ namespace Amazon_Price_Tracker.Controllers
         public async Task<Response<TrackedProductDto>> GetTrackedProductByProductIdAsync([FromBody]int productId) {
             return await _trackedProductReadRepository.GetTrackedProductByProductId(productId);
         }
+
+        [HttpPost]
+        [Route("DeleteTrackingOfProduct")]
+        public async Task<Response> DeleteTrackingOfProduct([FromBody] int id) 
+        {
+            return await _trackedProductWriteRepository.DeleteTrackingProduct(id);
+        }
     }
 }

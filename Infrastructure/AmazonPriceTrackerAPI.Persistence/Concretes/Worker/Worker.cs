@@ -22,6 +22,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
         private readonly HtmlWeb _htmlWeb;
         private readonly IMailRepository _mailRepository;
         private readonly ITrackedProductReadRepository _trackedProductReadRepository;
+        private readonly ITrackedProductWriteRepository _trackedProductWriteRepository;
         private readonly IProductReadRepository _productReadRepository;
         private readonly AmazonPriceTrackerDbContext _context;
         int counter = 0;
@@ -34,11 +35,12 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
            //_htmlWeb.UserAgent = "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.67 Safari/537.36";
             
             IServiceScope scope = _provider.CreateScope();
-
+    
             _context = scope.ServiceProvider.GetRequiredService<AmazonPriceTrackerDbContext>();
             _mailRepository = scope.ServiceProvider.GetRequiredService<IMailRepository>();
             _trackedProductReadRepository = scope.ServiceProvider.GetRequiredService<ITrackedProductReadRepository>();
             _productReadRepository = scope.ServiceProvider.GetRequiredService<IProductReadRepository>();
+            _trackedProductWriteRepository = scope.ServiceProvider.GetRequiredService<ITrackedProductWriteRepository>();
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -50,7 +52,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                 _logger.LogInformation("Step : " + counter.ToString());
                 await RunTasks(result);
                 var rand = new Random();
-                //await Task.Delay(rand.Next(5 * 60000, 7 * 60000));
+               await Task.Delay(rand.Next(5 * 60000, 7 * 60000));
             }
         }
 
@@ -76,10 +78,19 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                 foreach (var item in result)
                 {
                     HtmlDocument doc = await _htmlWeb.LoadFromWebAsync(item.Url);
-                    
-                    // Read the price from webpage of product
+
+                    // Read the price of product from webpage 
                     var random = new Random();
-                    //await Task.Delay(random.Next(1000, 15000));
+                    await Task.Delay(random.Next(1000, 15000));
+
+                    if (doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen") == null) 
+                    {
+                        
+                        _trackedProductWriteRepository.DeleteTrackingProduct(item.ProductId);
+                        _trackedProductWriteRepository.SaveChangesAsync();
+                        _logger.LogInformation("Ürünün fiyatına ulaşılamadığı için ürün takip tablosundan çıkarıldı.");
+                        break;
+                    }
                     var price = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen").InnerText.Replace("TL", string.Empty));
 
                     // Get TrackedProduct and product by ids

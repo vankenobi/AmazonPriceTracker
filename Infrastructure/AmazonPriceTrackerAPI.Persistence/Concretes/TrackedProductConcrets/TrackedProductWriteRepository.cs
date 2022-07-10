@@ -84,22 +84,32 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
 
         public async Task<Response> DeleteTrackingProduct(int productId)
         {
-            var trackingProduct = await _trackedProductReadRepository.GetSingleAsync(x => x.ProductId == productId);
-
-            if (trackingProduct == null)
+            try
             {
-                return new Response(ResponseCode.NotFound, "Tracking product not found");
-            }
+                var trackingProduct = await _trackedProductReadRepository.GetSingleAsync(x => x.ProductId == productId);
 
-            bool state = Remove(trackingProduct);
-            if (state == true)
-            {
-                return new Response(ResponseCode.Success, "Product deleted from tracking list succesfully");
+                if (trackingProduct == null)
+                {
+                    return new Response(ResponseCode.NotFound, "Tracking product not found");
+                }
+
+                Remove(trackingProduct);
+                int state = await SaveChangesAsync();
+
+                if (state > 0)
+                {
+                    return new Response(ResponseCode.Success, "Product deleted from tracking list succesfully");
+                }
+                else
+                {
+                    return new Response(ResponseCode.Error, "Error on deleting");
+                }
             }
-            else
+            catch (Exception)
             {
                 return new Response(ResponseCode.Error, "Error on deleting");
             }
+            
         }
 
         public async Task<Response> UpdateTrackedProductIntervalAndTargetPrice  (TrackingProductPriceAndIntervalDto trackingProductPriceAndIntervalDto)

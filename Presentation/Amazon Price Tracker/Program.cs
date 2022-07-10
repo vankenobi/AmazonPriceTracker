@@ -25,7 +25,7 @@ if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
-    app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+    app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithOrigins("http://44.204.241.92:8080"));
 }
 
 app.UseHttpsRedirection();
