@@ -9,7 +9,7 @@ builder.Services.AddPersistenceServices();
 
 builder.Services.AddCors(c =>
 {
-    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+    c.AddPolicy("AllowOrigin", options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().AllowCredentials());
 });
 
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
