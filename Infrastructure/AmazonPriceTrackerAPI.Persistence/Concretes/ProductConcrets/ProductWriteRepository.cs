@@ -4,6 +4,7 @@ using AmazonPriceTrackerAPI.Domain.Shared.ComplexTypes;
 using AmazonPriceTrackerAPI.Domain.Shared.Concret;
 using AmazonPriceTrackerAPI.Persistence.Contexts;
 using HtmlAgilityPack;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -13,22 +14,25 @@ using System.Threading.Tasks;
 
 namespace AmazonPriceTrackerAPI.Persistence.Concretes
 {
-    public class ProductWriteRepository : WriteRepository<Product>, IProductWriteRepository
+    public class ProductWriteRepository : WriteRepository<Product>, IProductWriteRepository 
     {
         private readonly HtmlWeb _htmlWeb;
         private readonly IProductReadRepository _productReadRepository;
         private readonly ITrackedProductWriteRepository _trackedProductWriteRepository;
         private readonly ITrackedProductReadRepository _trackedProductReadRepository;
+        private readonly ILogger<ProductWriteRepository> _logger;
 
         public ProductWriteRepository(AmazonPriceTrackerDbContext context, 
                                       IProductReadRepository productReadRepository,
                                       ITrackedProductWriteRepository trackedProductWriteRepository,
-                                      ITrackedProductReadRepository trackedProductReadRepository) : base(context)
+                                      ITrackedProductReadRepository trackedProductReadRepository,
+                                      ILogger<ProductWriteRepository> logger) : base(context)
         {
             _htmlWeb = new HtmlWeb();
             _productReadRepository = productReadRepository;
             _trackedProductWriteRepository = trackedProductWriteRepository;
             _trackedProductReadRepository = trackedProductReadRepository;
+            _logger = logger;
         }
 
         public async Task<Response> AddNewProductWithUrlAsync(string url)
@@ -47,7 +51,11 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                 {
                     var price = doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen");
                     if (price.InnerText == null)
+                    {
+                        _logger.LogInformation("Price of product not found");
                         return new Response(ResponseCode.Error, "Error on adding new product.");
+                    }
+                        
                     product.CurrentPrice = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen"));
                     product.Name = doc.QuerySelector("#productTitle").InnerText.Trim();
                     product.Image = doc.QuerySelector("#landingImage").Attributes["src"].Value;
@@ -60,11 +68,13 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                     await AddAsync(product);
                     await SaveChangesAsync();
 
+                    _logger.LogInformation("Product added succesfully.");
                     return new Response(ResponseCode.Success, "Product added succesfully.");
                 }
             }
             catch (Exception)
             {
+                _logger.LogInformation("Error on adding new product.");
                 return new Response(ResponseCode.Error,"Error on adding new product.");
             }
         }
