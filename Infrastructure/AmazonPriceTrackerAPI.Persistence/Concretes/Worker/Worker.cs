@@ -12,7 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using System.Globalization;
 using System.Net.Mail;
-
+//github action test
 namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
 {
     public class Worker : BackgroundService
