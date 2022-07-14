@@ -49,7 +49,9 @@ The applications code itself doesn’t care. This makes it very useful for testi
 
 #### **Database: Postgresql**
 
-<img src="https://drive.google.com/uc?export=view&id=1u1n1-Nw6eQw9AYOXJY6GN1ZhBI2wwIaR" alt="MarineGEO circle logo" style="width:30%;"/>
+<p align="center">
+  <img src="https://drive.google.com/uc?export=view&id=1u1n1-Nw6eQw9AYOXJY6GN1ZhBI2wwIaR" alt="MarineGEO circle logo" style="text-align: center;  width:30%;"/>
+</p>
 
 PostgreSQL evolved from the Ingres project at the University of California, Berkeley. In 1982, the leader of the Ingres team, Michael Stonebraker, left Berkeley to make a proprietary version of Ingres. He returned to Berkeley in 1985, and began a post-Ingres project to address the problems with contemporary database systems that had become increasingly clear during the early 1980s. He won the Turing Award in 2014 for these and other projects, and techniques pioneered in them.
 The new project, POSTGRES, aimed to add the fewest features needed to completely support data types. These features included the ability to define types and to fully describe relationships – something used widely, but maintained entirely by the user. In POSTGRES, the database understood relationships, and could retrieve information in related tables in a natural way using rules. POSTGRES used many of the ideas of Ingres, but not its code.
