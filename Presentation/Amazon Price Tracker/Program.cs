@@ -27,8 +27,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
     app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 }
-
-app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+// withexposedheaders added. 
+app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader().WithExposedHeaders());
 
 app.UseHttpsRedirection();
 
