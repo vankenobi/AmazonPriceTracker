@@ -13,9 +13,13 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
 {
     public class ProductReadRepository : ReadRepository<Product>, IProductReadRepository
     {
+     
+
         public ProductReadRepository(AmazonPriceTrackerDbContext context) : base(context)
         {
         }
+
+        
 
         public async Task<Response<List<Product>>> GetAllProductsAsync()
         {

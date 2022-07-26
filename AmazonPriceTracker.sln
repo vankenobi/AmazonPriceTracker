@@ -5,19 +5,23 @@ VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{220B30BE-85DA-4D43-A8E2-4114A8177CBB}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonPriceTrackerAPI.Domain", "core\AmazonPriceTrackerAPI.Domain\AmazonPriceTrackerAPI.Domain.csproj", "{D1556917-5DBC-47E8-9252-E33E40451E4B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmazonPriceTrackerAPI.Domain", "core\AmazonPriceTrackerAPI.Domain\AmazonPriceTrackerAPI.Domain.csproj", "{D1556917-5DBC-47E8-9252-E33E40451E4B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonPriceTrackerAPI.Application", "core\AmazonPriceTrackerAPI.Application\AmazonPriceTrackerAPI.Application.csproj", "{82E1DB39-6858-4960-B816-5F9310A81852}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmazonPriceTrackerAPI.Application", "core\AmazonPriceTrackerAPI.Application\AmazonPriceTrackerAPI.Application.csproj", "{82E1DB39-6858-4960-B816-5F9310A81852}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{E54C264B-2C00-4879-AB60-D30F5741C6EA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonPriceTrackerAPI.Infrastructure", "Infrastructure\AmazonPriceTrackerAPI.Infrastructure\AmazonPriceTrackerAPI.Infrastructure.csproj", "{E2743512-4C46-4866-ABC0-11F4794B957A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmazonPriceTrackerAPI.Infrastructure", "Infrastructure\AmazonPriceTrackerAPI.Infrastructure\AmazonPriceTrackerAPI.Infrastructure.csproj", "{E2743512-4C46-4866-ABC0-11F4794B957A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AmazonPriceTrackerAPI.Persistence", "Infrastructure\AmazonPriceTrackerAPI.Persistence\AmazonPriceTrackerAPI.Persistence.csproj", "{1FC8F253-FE34-4BD5-B452-9DD5F63B547B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AmazonPriceTrackerAPI.Persistence", "Infrastructure\AmazonPriceTrackerAPI.Persistence\AmazonPriceTrackerAPI.Persistence.csproj", "{1FC8F253-FE34-4BD5-B452-9DD5F63B547B}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{F7B8EC66-4EF9-426A-A436-B487DE1D6632}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Amazon Price Tracker", "Presentation\Amazon Price Tracker\Amazon Price Tracker.csproj", "{7CCF0F7F-F762-4FA5-A371-5CC8FE684F06}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Amazon Price Tracker", "Presentation\Amazon Price Tracker\Amazon Price Tracker.csproj", "{7CCF0F7F-F762-4FA5-A371-5CC8FE684F06}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Test", "Test", "{CE3F866C-63C3-4597-AFF0-8C24BD1AFB62}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{C222CA77-EA83-4624-9DFE-0A15B098ADF4}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -45,6 +49,10 @@ Global
 		{7CCF0F7F-F762-4FA5-A371-5CC8FE684F06}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CCF0F7F-F762-4FA5-A371-5CC8FE684F06}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CCF0F7F-F762-4FA5-A371-5CC8FE684F06}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C222CA77-EA83-4624-9DFE-0A15B098ADF4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C222CA77-EA83-4624-9DFE-0A15B098ADF4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C222CA77-EA83-4624-9DFE-0A15B098ADF4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C222CA77-EA83-4624-9DFE-0A15B098ADF4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -55,6 +63,7 @@ Global
 		{E2743512-4C46-4866-ABC0-11F4794B957A} = {E54C264B-2C00-4879-AB60-D30F5741C6EA}
 		{1FC8F253-FE34-4BD5-B452-9DD5F63B547B} = {E54C264B-2C00-4879-AB60-D30F5741C6EA}
 		{7CCF0F7F-F762-4FA5-A371-5CC8FE684F06} = {F7B8EC66-4EF9-426A-A436-B487DE1D6632}
+		{C222CA77-EA83-4624-9DFE-0A15B098ADF4} = {CE3F866C-63C3-4597-AFF0-8C24BD1AFB62}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5A5BD605-E18D-4A22-97BE-3BCA49E2D05B}
