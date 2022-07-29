@@ -27,6 +27,7 @@ namespace UnitTests.ProductFixture
             };
 
             productReadRepository.Setup( x => x.GetAllAsync(false)).Returns(Task.FromResult(inMemory));
+
             /*
             ProductReadRepository _productReadRepository = new ProductReadRepository();
 
