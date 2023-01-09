@@ -9,15 +9,17 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
+using Serilog;
+using Serilog.Context;
 using System.Globalization;
 using System.Net.Mail;
-//github action test
+
+
 namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
 {
     public class Worker : BackgroundService
     {
-        private readonly ILogger<Worker> _logger;
+        private readonly ILogger _logger;
         private readonly IServiceProvider _provider;
         private readonly HtmlWeb _htmlWeb;
         private readonly IMailRepository _mailRepository;
@@ -25,9 +27,8 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
         private readonly ITrackedProductWriteRepository _trackedProductWriteRepository;
         private readonly IProductReadRepository _productReadRepository;
         private readonly AmazonPriceTrackerDbContext _context;
-        int counter = 0;
-        int counter2 = 0;
-        public Worker(ILogger<Worker> logger, IServiceProvider serviceProvider)
+
+        public Worker(ILogger logger, IServiceProvider serviceProvider)
         {
             _logger = logger;
             _provider = serviceProvider;
@@ -47,9 +48,9 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
         {
             while (!stoppingToken.IsCancellationRequested)
             {
+                var requestId = LogContext.PushProperty("RequestId", Guid.NewGuid());
+                _logger.Information("ExecuteAsync method runned. {requestId}", requestId);
                 var result = await CheckTrackingProductNextRunTime();
-                counter++;
-                _logger.LogInformation("Step : " + counter.ToString());
                 await RunTasks(result);
                 var rand = new Random();
                 await Task.Delay(rand.Next(5 * 60000, 7 * 60000));
@@ -66,13 +67,14 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                           join t in trackedProducts on p.Id equals t.ProductId
                           where t.NextRunTime < DateTime.Now
                           select new CheckTrackingProductDto { TrackingId = t.Id, ProductId = p.Id, Url = p.Url }).ToList();
+            _logger.Information("The products whose working time come was checked and pulled");
             return result;
         }
 
         // will catch error expections 
         public async Task RunTasks(List<CheckTrackingProductDto> result)
         {
-            counter2 += result.Count;
+            _logger.Information("schedulled job started.");
             if (result != null)
             {
                 foreach (var item in result)
@@ -88,7 +90,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
 
                         _trackedProductWriteRepository.DeleteTrackingProduct(item.ProductId);
                         _trackedProductWriteRepository.SaveChangesAsync();
-                        _logger.LogInformation("Ürünün fiyatına ulaşılamadığı için ürün takip tablosundan çıkarıldı.");
+                        _logger.Information("Ürünün fiyatına ulaşılamadığı için ürün takip tablosundan çıkarıldı.");
                         break;
                     }
                     var price = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen").InnerText.Replace("TL", string.Empty));
@@ -99,9 +101,9 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                     trackedProduct.NextRunTime = DateTime.Now.AddMinutes(trackedProduct.Interval);
                     await _trackedProductReadRepository.SaveChangesAsync();
 
-                    _logger.LogInformation(counter2 + " kez çalıştı.");
                     if (trackedProduct.CurrentPrice != price)
                     {
+
                         if (trackedProduct.TargetPrice > price)
                         {
                             double oldPrice = (double)product.CurrentPrice;
@@ -123,7 +125,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                             //await SendEmailPriceDown(mailTemplateDto);
                             mailTemplateDto.Dispose();
 
-                            _logger.LogInformation("Ürünün fiyatı düştü.");
+                            _logger.Information("Ürünün fiyatı düştü.");
                         }
 
                         else if (trackedProduct.CurrentPrice < price)
@@ -149,7 +151,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                             await _context.SaveChangesAsync();
 
                             mailTemplateDto.Dispose();
-                            _logger.LogInformation("Ürünün fiyatı yükseldi.");
+                            _logger.Information("Ürünün fiyatı yükseldi.");
                         }
 
                         else if (trackedProduct.CurrentPrice > price)
@@ -167,7 +169,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.Worker
                     }
                 }
             }
-            _logger.LogInformation("logger runned succesfully.");
+            _logger.Information("schedulled job finished.");
         }
 
         public async Task SendEmailPriceUp(MailTemplateDto mailTemplateDto)

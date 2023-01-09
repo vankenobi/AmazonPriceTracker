@@ -29,6 +29,7 @@ namespace AmazonPriceTrackerAPI.Persistence
             services.AddScoped<ITrackedProductReadRepository,TrackedProductReadRepository>();
             services.AddScoped<ITrackedProductWriteRepository, TrackedProductWriteRepository>();
             services.AddScoped<IMailRepository,MailRepository>();
+             
             
         }
     }

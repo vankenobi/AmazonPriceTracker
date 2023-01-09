@@ -4,7 +4,7 @@ using AmazonPriceTrackerAPI.Domain.Shared.ComplexTypes;
 using AmazonPriceTrackerAPI.Domain.Shared.Concret;
 using AmazonPriceTrackerAPI.Persistence.Contexts;
 using HtmlAgilityPack;
-using Microsoft.Extensions.Logging;
+using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -17,16 +17,16 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
     public class ProductWriteRepository : WriteRepository<Product>, IProductWriteRepository 
     {
         private readonly HtmlWeb _htmlWeb;
+        private readonly ILogger _logger;
         private readonly IProductReadRepository _productReadRepository;
         private readonly ITrackedProductWriteRepository _trackedProductWriteRepository;
         private readonly ITrackedProductReadRepository _trackedProductReadRepository;
-        private readonly ILogger<ProductWriteRepository> _logger;
 
         public ProductWriteRepository(AmazonPriceTrackerDbContext context, 
                                       IProductReadRepository productReadRepository,
                                       ITrackedProductWriteRepository trackedProductWriteRepository,
                                       ITrackedProductReadRepository trackedProductReadRepository,
-                                      ILogger<ProductWriteRepository> logger) : base(context)
+                                      ILogger logger) : base(context)
         {
             _htmlWeb = new HtmlWeb();
             _productReadRepository = productReadRepository;
@@ -40,10 +40,11 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
             try
             {
                 HtmlDocument doc = _htmlWeb.Load(url);
-
+                _logger.Information("Product page pulled.");
                 var hasValue = _productReadRepository.GetWhere(x => x.Url == url).FirstOrDefault();
                 if (hasValue != null)
                 {
+                    _logger.Warning("Product already exists. {@product}", hasValue);
                     return new Response(ResponseCode.BadRequest, "Product already exists.");
                 }
 
@@ -52,7 +53,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                     var price = doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen");
                     if (price.InnerText == null)
                     {
-                        _logger.LogInformation("Price of product not found");
+                        _logger.Warning("Price of product not found");
                         return new Response(ResponseCode.Error, "Error on adding new product.");
                     }
                         
@@ -64,17 +65,19 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                     product.Rate = EditRate(doc.DocumentNode.SelectSingleNode("//*[@id='acrPopover']/span[1]/a/i[1]/span")?.InnerText.Split(" ")[3]);
                     product.TechnicalDetails = doc.DocumentNode.SelectNodes(@"//*[@id='feature-bullets']/ul//li")?.Select(li => li.InnerText).ToList<string>();
                     product.Description = doc.QuerySelector("#productDescription > p > span")?.InnerText;
+                    
+                    _logger.Information("Product page parsed.");
 
                     await AddAsync(product);
                     await SaveChangesAsync();
 
-                    _logger.LogInformation("Product added succesfully.");
+                    _logger.Information("Product added succesfully. {@product}",product);
                     return new Response(ResponseCode.Success, "Product added succesfully.");
                 }
             }
             catch (Exception)
             {
-                _logger.LogInformation("Error on adding new product.");
+                _logger.Information("Error on adding new product.");
                 return new Response(ResponseCode.Error,"Error on adding new product.");
             }
         }
@@ -87,6 +90,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                 var product = await _productReadRepository.GetSingleAsync(x => x.Id == id);
                 if (product == null)
                 {
+                    _logger.Warning("The product to be deleted was not found");
                     return new Response(ResponseCode.NotFound, "Product not found.");
                 }
 
@@ -101,10 +105,12 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                 {
                     await SaveChangesAsync();
                     await _trackedProductWriteRepository.SaveChangesAsync();
+                    _logger.Information("Product deleted succesfuly. {@product}", product);
                     return new Response(ResponseCode.Success, "Product deleted succesfuly.");
                 }
                 else
                 {
+                    _logger.Error("Error on delete {@product}", product);
                     return new Response(ResponseCode.Error, "Error on delete");
                 }
             }
@@ -121,6 +127,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                 var productEntity = await _productReadRepository.GetSingleAsync(x => x.Id == productId, true);
                 if (productEntity == null)
                 {
+                    _logger.Warning("Product not found");
                     return new Response(ResponseCode.NotFound, "Product not found");
                 }
 
@@ -131,12 +138,15 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
 
                 if (state == true)
                 {
+                    _logger.Information("The product updated succesfully");
                     return new Response(ResponseCode.Success, "The product updated succesfully");
                 }
+                _logger.Error("Error on update.");
                 return new Response(ResponseCode.Error, "Error on update.");
             }
             catch (Exception)
             {
+                _logger.Error("Error on update.");
                 return new Response(ResponseCode.Error, "Error on update.");
             }
             
