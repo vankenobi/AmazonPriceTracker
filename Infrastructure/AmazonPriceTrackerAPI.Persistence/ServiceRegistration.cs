@@ -18,8 +18,10 @@ namespace AmazonPriceTrackerAPI.Persistence
 {
     public static class ServiceRegistration
     {
+
         public static void AddPersistenceServices(this IServiceCollection services) 
         {
+
             services.AddSingleton<Worker, Worker>();
             services.AddHostedService<Worker>();
             

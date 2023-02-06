@@ -54,6 +54,16 @@ if (app.Environment.IsDevelopment())
     app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 }
 
+if (app.Environment.IsProduction()) 
+{
+    
+}
+
+if (app.Environment.IsStaging()) 
+{
+
+}
+
 
 
 app.UseCors();
