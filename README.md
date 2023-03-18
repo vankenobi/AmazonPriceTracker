@@ -11,6 +11,38 @@
 
 Amazon price tracker is an open source project that followed the prices. Perfect to run on a docker container. This API includes some methods for price tracking. 
 
+## How can you install the project on your local ? 
+
+#### Open the terminal in project folder and then change directory to "Docker Compose" folder
+
+```command  m 
+  cd "Docker Compose"
+```
+
+#### If you type "ls" command. You will see the two compose file called "docker-composeforarm64.yml","docker-composeforamd64.yml". (Optinal) 
+
+```command
+  ls
+```
+
+#### Run the below command to run the project. I choosed the "docker-composeforarm64.yml" because processor of my computer supports the arm64 architecture.
+
+```command
+  docker compose -f docker-composeforarm64.yml up
+```
+
+#### If you want to access the app. Paste the below url.
+
+```url
+  http://localhost:8080/swagger/index.html
+```
+
+#### If you want to access the SEQ (Centralized Structured Logs). Paste the below url.
+
+```url
+  http://localhost:5341/
+```
+
 
 
 #  Used Technologies And Architecture
