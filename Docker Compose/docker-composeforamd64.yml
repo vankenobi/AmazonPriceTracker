@@ -1,0 +1,55 @@
+version: '3.8'
+
+networks:   
+  custom_network:
+    driver: bridge
+
+services:
+  db:
+    image: postgres:latest
+    container_name: psql
+    restart: unless-stopped
+    environment:
+      POSTGRES_PASSWORD: 1234567
+      POSTGRES_USER: postgres
+      POSTGRES_DB: AmazonPriceTrackerDb
+    volumes:
+      - ./pgdata:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - custom_network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+  
+  seq:
+    image: datalust/seq:2023.1
+    container_name: seq
+    restart: unless-stopped
+    networks:
+      - custom_network
+    environment:
+      - ACCEPT_EULA=Y
+    ports:
+      - 5341:80
+
+  app:
+    image: musakucuk99/amazonpricetracker:amd64
+    container_name: amazonpricetrackerapi
+    environment:
+      ASPNETCORE_ENVIRONMENT: Docker
+      DB_CONNECTION: "User ID=postgres;Password=1234567;Host=psql;Port=5432;Database=AmazonPriceTrackerDb;"
+      SEQ_DNS: seq
+      SEQ_PORT: 5341 
+    ports:
+      - 8080:80
+    networks:
+      - custom_network
+    depends_on:
+      db:
+        condition: service_healthy
+
+
+
