@@ -24,8 +24,7 @@ namespace AmazonPriceTrackerAPI.Persistence
 
             services.AddSingleton<Worker, Worker>();
             services.AddHostedService<Worker>();
-            
-            services.AddDbContext<AmazonPriceTrackerDbContext>(options => options.UseNpgsql(Configuration.ConnectionString),ServiceLifetime.Transient);
+            services.AddDbContext<AmazonPriceTrackerDbContext>(options => options.UseNpgsql(Configuration.ConnectionString),ServiceLifetime.Transient); 
             services.AddScoped<IProductReadRepository,ProductReadRepository>();
             services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
             services.AddScoped<ITrackedProductReadRepository,TrackedProductReadRepository>();

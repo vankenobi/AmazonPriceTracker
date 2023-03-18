@@ -1,17 +1,7 @@
 using AmazonPriceTrackerAPI.Persistence;
 using Serilog;
-using Serilog.Events;
-using Serilog.Formatting.Json;
-using Serilog.Formatting.Display;
-using Serilog.Formatting.Compact;
-using Serilog.Core;
 
-var loggerConfig = new LoggerConfiguration()
-    .WriteTo.File("all-daily-.logs", rollingInterval: RollingInterval.Day,outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {RequestId} {Message:lj}{NewLine}{Exception}")
-    .MinimumLevel.Debug()
-    .WriteTo.Seq("http://localhost:5341/")
-    .WriteTo.Console(outputTemplate: "{Timestamp:yyyy-MM-dd HH:mm:ss.fff zzz} [{Level:u3}] {RequestId} {Message:lj}{NewLine}{Exception}")
-    .Enrich.FromLogContext();
+var loggerConfig = Configuration.loggerConfiguration;
 
 try
 {
@@ -49,22 +39,18 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
+    
     app.UseSwagger();
     app.UseSwaggerUI();
     app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 }
 
-if (app.Environment.IsProduction()) 
+if (app.Environment.EnvironmentName == "Docker") 
 {
-    
+    app.UseSwagger();
+    app.UseSwaggerUI();
+    app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
 }
-
-if (app.Environment.IsStaging()) 
-{
-
-}
-
-
 
 app.UseCors();
 app.UseHttpsRedirection();

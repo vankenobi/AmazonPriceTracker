@@ -32,7 +32,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("MailAddress")
                         .IsRequired()
@@ -43,7 +43,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Migrations
                         .HasColumnType("text");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 
@@ -59,7 +59,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<double?>("CurrentPrice")
                         .HasColumnType("double precision");
@@ -85,7 +85,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Migrations
                         .HasColumnType("text[]");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<string>("Url")
                         .IsRequired()
@@ -111,7 +111,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Migrations
                     NpgsqlPropertyBuilderExtensions.UseIdentityByDefaultColumn(b.Property<int>("Id"));
 
                     b.Property<DateTime>("CreatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("CurrentPrice")
                         .HasColumnType("double precision");
@@ -120,10 +120,10 @@ namespace AmazonPriceTrackerAPI.Persistence.Migrations
                         .HasColumnType("integer");
 
                     b.Property<DateTime>("MailSendingDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<DateTime>("NextRunTime")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.Property<double>("PriceChange")
                         .HasColumnType("double precision");
@@ -139,7 +139,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Migrations
                         .HasColumnType("double precision");
 
                     b.Property<DateTime>("UpdatedDate")
-                        .HasColumnType("timestamp without time zone");
+                        .HasColumnType("timestamp with time zone");
 
                     b.HasKey("Id");
 

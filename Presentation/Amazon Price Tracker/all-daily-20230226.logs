@@ -1,0 +1,12 @@
+2023-02-26 01:38:43.788 +03:00 [INF] 6952a2c5-8415-406b-ae4f-a006c4034391 ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2023-02-26 01:38:45.338 +03:00 [INF] 6952a2c5-8415-406b-ae4f-a006c4034391 The products whose working time come was checked and pulled
+2023-02-26 01:38:45.414 +03:00 [INF] 6952a2c5-8415-406b-ae4f-a006c4034391 schedulled job started.
+2023-02-26 01:46:42.146 +03:00 [INF] 13965418-6027-4807-9f98-5bd15a78454e ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2023-02-26 01:46:43.881 +03:00 [INF] 13965418-6027-4807-9f98-5bd15a78454e The products whose working time come was checked and pulled
+2023-02-26 01:46:43.899 +03:00 [INF] 13965418-6027-4807-9f98-5bd15a78454e schedulled job started.
+2023-02-26 01:50:48.019 +03:00 [INF] 45d387aa-4196-48c8-ba94-f902ea8d4eb9 ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2023-02-26 01:50:49.426 +03:00 [INF] 45d387aa-4196-48c8-ba94-f902ea8d4eb9 The products whose working time come was checked and pulled
+2023-02-26 01:50:49.445 +03:00 [INF] 45d387aa-4196-48c8-ba94-f902ea8d4eb9 schedulled job started.
+2023-02-26 01:52:29.240 +03:00 [INF] 574a83c9-b9dd-4c60-b96c-43367a586d87 ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2023-02-26 01:52:30.630 +03:00 [INF] 574a83c9-b9dd-4c60-b96c-43367a586d87 The products whose working time come was checked and pulled
+2023-02-26 01:52:30.649 +03:00 [INF] 574a83c9-b9dd-4c60-b96c-43367a586d87 schedulled job started.

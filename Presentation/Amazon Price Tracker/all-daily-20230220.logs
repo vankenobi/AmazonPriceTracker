@@ -1,0 +1,5 @@
+2023-02-20 17:23:41.919 +03:00 [INF] e7482686-8355-496c-9329-f1ac4f3019f5 ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2023-02-20 17:23:43.447 +03:00 [INF] e7482686-8355-496c-9329-f1ac4f3019f5 The products whose working time come was checked and pulled
+2023-02-20 17:23:43.520 +03:00 [INF] e7482686-8355-496c-9329-f1ac4f3019f5 schedulled job started.
+2023-02-20 17:23:43.522 +03:00 [INF] e7482686-8355-496c-9329-f1ac4f3019f5 schedulled job finished.
+2023-02-20 22:57:55.731 +03:00 [INF] d1a8a49d-6581-424e-b28e-00b99b1f297c ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
