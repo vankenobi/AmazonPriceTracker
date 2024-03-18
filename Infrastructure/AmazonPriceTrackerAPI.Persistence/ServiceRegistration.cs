@@ -21,9 +21,12 @@ namespace AmazonPriceTrackerAPI.Persistence
 
         public static void AddPersistenceServices(this IServiceCollection services) 
         {
+            var loggerConfig = Configuration.loggerConfiguration;
+
             services.AddSingleton<Worker, Worker>();
             services.AddHostedService<Worker>();
             services.AddDbContext<AmazonPriceTrackerDbContext>(options => options.UseNpgsql(Configuration.ConnectionString),ServiceLifetime.Transient); 
+            services.AddSingleton<Serilog.ILogger>(loggerConfig.CreateLogger());
             services.AddScoped<IProductReadRepository,ProductReadRepository>();
             services.AddScoped<IProductWriteRepository, ProductWriteRepository>();
             services.AddScoped<ITrackedProductReadRepository,TrackedProductReadRepository>();

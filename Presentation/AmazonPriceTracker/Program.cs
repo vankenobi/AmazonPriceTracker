@@ -1,8 +1,6 @@
 using AmazonPriceTrackerAPI.Persistence;
 using Serilog;
 
-var loggerConfig = Configuration.loggerConfiguration;
-
 try
 {
     Log.Information("Application starting up.");
@@ -22,7 +20,6 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 builder.Services.AddPersistenceServices();
-builder.Services.AddSingleton<Serilog.ILogger>(loggerConfig.CreateLogger());
 
 builder.Services.AddCors(options => options.AddDefaultPolicy(policy =>
     policy.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin()
@@ -38,13 +35,6 @@ var app = builder.Build();
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-    app.UseCors(options => options.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
-}
-
-if (app.Environment.EnvironmentName == "Docker") 
 {
     app.UseSwagger();
     app.UseSwaggerUI();

@@ -17,7 +17,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes.TrackedProductConcrets
         private readonly ITrackedProductReadRepository _trackedProductReadRepository;
 
         private readonly HtmlWeb _htmlWeb;
-
+        
         public TrackedProductWriteRepository(AmazonPriceTrackerDbContext context,                      
                                              IProductReadRepository productReadRepository,
                                              ITrackedProductReadRepository trackedProductReadRepository) : base(context)
