@@ -1,0 +1,13 @@
+﻿/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/Controllers/MailsController.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/Controllers/ProductsController.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/Controllers/TrackedProductsController.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/Program.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/obj/Debug/net8.0/Amazon Price Tracker.GlobalUsings.g.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/obj/Debug/net8.0/.NETCoreApp,Version=v8.0.AssemblyAttributes.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/obj/Debug/net8.0/Amazon Price Tracker.AssemblyInfo.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/obj/Debug/net8.0/Amazon Price Tracker.MvcApplicationPartsAssemblyInfo.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/appsettings.Development.json
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/appsettings.Docker.json
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/appsettings.json
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/Dockerfile
+/Users/musakucuk/Desktop/AmazonPriceTracker/Presentation/Amazon Price Tracker/Properties/launchSettings.json

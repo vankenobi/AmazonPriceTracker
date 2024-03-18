@@ -41,9 +41,10 @@ namespace AmazonPriceTrackerAPI.Domain.Shared.Concret
 
     public class Response : IServiceResponse
     {
-        public ResponseCode ResponseCode { get; }
-
+        public ResponseCode ResponseCode { get; } 
+ 
         public string Message { get; }
+
 
         public Response(ResponseCode responseCode)
         {

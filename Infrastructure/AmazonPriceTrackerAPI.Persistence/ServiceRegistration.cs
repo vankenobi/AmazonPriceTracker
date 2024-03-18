@@ -21,7 +21,6 @@ namespace AmazonPriceTrackerAPI.Persistence
 
         public static void AddPersistenceServices(this IServiceCollection services) 
         {
-
             services.AddSingleton<Worker, Worker>();
             services.AddHostedService<Worker>();
             services.AddDbContext<AmazonPriceTrackerDbContext>(options => options.UseNpgsql(Configuration.ConnectionString),ServiceLifetime.Transient); 
@@ -30,8 +29,6 @@ namespace AmazonPriceTrackerAPI.Persistence
             services.AddScoped<ITrackedProductReadRepository,TrackedProductReadRepository>();
             services.AddScoped<ITrackedProductWriteRepository, TrackedProductWriteRepository>();
             services.AddScoped<IMailRepository,MailRepository>();
-             
-            
         }
     }
 }

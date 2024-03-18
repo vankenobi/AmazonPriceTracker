@@ -4,11 +4,13 @@ using AmazonPriceTrackerAPI.Domain.Shared.ComplexTypes;
 using AmazonPriceTrackerAPI.Domain.Shared.Concret;
 using AmazonPriceTrackerAPI.Persistence.Contexts;
 using HtmlAgilityPack;
+using Microsoft.EntityFrameworkCore;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -34,46 +36,32 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
             _trackedProductReadRepository = trackedProductReadRepository;
             _logger = logger;
         }
+        private async Task<bool> IsProductAlreadyExist(string url)
+        {
+            var hasValue = await _productReadRepository.GetWhere(x => x.Url == url).AnyAsync();
+            if (hasValue)
+                return true;
+            return false;
+        }
 
         public async Task<Response> AddNewProductWithUrlAsync(string url)
         {
             try
             {
-                HtmlDocument doc = _htmlWeb.Load(url);
-                _logger.Information("Product page pulled.");
-                var hasValue = _productReadRepository.GetWhere(x => x.Url == url).FirstOrDefault();
-                if (hasValue != null)
+                if(await IsProductAlreadyExist(url))
                 {
-                    _logger.Warning("Product already exists. {@product}", hasValue);
+                    _logger.Warning("Product already exists.");
                     return new Response(ResponseCode.BadRequest, "Product already exists.");
                 }
+                
+                var doc = LoadDocument(url);
+                var product = ParseProductFromHtml(doc,url);
 
-                using (var product = new Product())
-                {
-                    var price = doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen");
-                    if (price.InnerText == null)
-                    {
-                        _logger.Warning("Price of product not found");
-                        return new Response(ResponseCode.Error, "Error on adding new product.");
-                    }
-                        
-                    product.CurrentPrice = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen"));
-                    product.Name = doc.QuerySelector("#productTitle").InnerText.Trim();
-                    product.Image = doc.QuerySelector("#landingImage").Attributes["src"].Value;
-                    product.StockState = doc.QuerySelector("#availability > span").InnerText.Trim();
-                    product.Url = url;
-                    product.Rate = EditRate(doc.DocumentNode.SelectSingleNode("//*[@id='acrPopover']/span[1]/a/i[1]/span")?.InnerText.Split(" ")[3]);
-                    product.TechnicalDetails = doc.DocumentNode.SelectNodes(@"//*[@id='feature-bullets']/ul//li")?.Select(li => li.InnerText).ToList<string>();
-                    product.Description = doc.QuerySelector("#productDescription > p > span")?.InnerText;
-                    
-                    _logger.Information("Product page parsed.");
+                await AddAsync(product);
+                await SaveChangesAsync();
 
-                    await AddAsync(product);
-                    await SaveChangesAsync();
-
-                    _logger.Information("Product added succesfully. {@product}",product);
-                    return new Response(ResponseCode.Success, "Product added succesfully.");
-                }
+                _logger.Information("Product added succesfully. {@product}",product);
+                return new Response(ResponseCode.Success, "Product added succesfully.");
             }
             catch (Exception)
             {
@@ -81,7 +69,6 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                 return new Response(ResponseCode.Error,"Error on adding new product.");
             }
         }
-
 
         public async Task<Response> DeleteProductAsync(int id)
         {
@@ -97,26 +84,20 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                 var trackingProduct = await _trackedProductReadRepository.GetSingleAsync(x => x.ProductId == product.Id,true);
                 if (trackingProduct != null)
                 {
-                    _trackedProductWriteRepository.Remove(trackingProduct.Id);
+                    await _trackedProductWriteRepository.Remove(trackingProduct.Id);
+                    await _trackedProductWriteRepository.SaveChangesAsync(); 
                 }
-                var state2 = Remove(id).Result;
-                
-                if (state2 == true)
-                {
-                    await SaveChangesAsync();
-                    await _trackedProductWriteRepository.SaveChangesAsync();
-                    _logger.Information("Product deleted succesfuly. {@product}", product);
-                    return new Response(ResponseCode.Success, "Product deleted succesfuly.");
-                }
-                else
-                {
-                    _logger.Error("Error on delete {@product}", product);
-                    return new Response(ResponseCode.Error, "Error on delete");
-                }
+
+                await Remove(id); 
+                await SaveChangesAsync();  
+                _logger.Information("Product deleted succesfuly. {@product}", product);
+                return new Response(ResponseCode.Success, "Product deleted succesfuly.");
+
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return new Response(ResponseCode.Error, "Error on delete");
+                _logger.Error("Error on delete: {ErrorMessage}", ex.Message);
+                return new Response(ResponseCode.Error, "Error on delete");             
             }
         }
 
@@ -124,35 +105,26 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
         {
             try
             {
-                var productEntity = await _productReadRepository.GetSingleAsync(x => x.Id == productId, true);
-                if (productEntity == null)
+                var product = await _productReadRepository.GetSingleAsync(x => x.Id == productId, true);
+
+                if (product == null)
                 {
-                    _logger.Warning("Product not found");
-                    return new Response(ResponseCode.NotFound, "Product not found");
+                    _logger.Warning("The product not found");
+                    return new Response(ResponseCode.NotFound, "The product not found");
                 }
 
-                productEntity.isFavorite = productEntity.isFavorite == false ? true : false;
-                
-                var state = Update(productEntity);
-                await SaveChangesAsync();
-
-                if (state == true)
-                {
-                    _logger.Information("The product updated succesfully");
-                    return new Response(ResponseCode.Success, "The product updated succesfully");
-                }
-                _logger.Error("Error on update.");
-                return new Response(ResponseCode.Error, "Error on update.");
+                product.isFavorite = !product.isFavorite;
+                await _productReadRepository.SaveChangesAsync();
+             
+                _logger.Information("The product favorite state succesfully changed");
+                return new Response(ResponseCode.Success, "The product favorite state succesfully changed");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.Error("Error on update.");
-                return new Response(ResponseCode.Error, "Error on update.");
-            }
-            
-           
+                _logger.Error("Error on update favorite state : {ErrorMessage}", ex.Message);
+                return new Response(ResponseCode.Error, "Error on update favorite state.");
+            } 
         }
-
 
         private double? EditPrice(HtmlNode value)
         {
@@ -166,7 +138,7 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
             }
             return null;
         }
-
+        
         private double? EditRate(string value) 
         {
             if (value == null) 
@@ -179,5 +151,48 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
             }
             return null;
         }
+
+        private Product ParseProductFromHtml(HtmlDocument doc, string url)
+        {
+            var price = doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen");
+
+            // Ürün fiyatı kontrolü
+            if (price.InnerText == null)
+            {
+                _logger.Warning("Price of product not found - ", url);
+            }
+
+            Product product = new()
+            {
+                CurrentPrice = EditPrice(doc.QuerySelector("#corePrice_feature_div > div > span > span.a-offscreen")),
+                Name = doc.QuerySelector("#productTitle").InnerText.Trim(),
+                Image = doc.QuerySelector("#landingImage").Attributes["src"].Value,
+                StockState = doc.QuerySelector("#availability > span").InnerText.Trim(),
+                Url = url,
+                Rate = EditRate(doc.DocumentNode.SelectSingleNode("//*[@id='acrPopover']/span[1]/a/i[1]/span")?
+                                .InnerText.Split(" ")[3]),
+                TechnicalDetails = doc.DocumentNode.SelectNodes(@"//*[@id='feature-bullets']/ul//li")?
+                                        .Select(li => li.InnerText).ToList<string>(),
+                Description = doc.QuerySelector("#productDescription > p > span")?.InnerText
+            };
+
+            return product;
+        }
+
+        private HtmlDocument LoadDocument(string url){
+            try
+            {
+                HtmlDocument doc = _htmlWeb.Load(url);
+                _logger.Information("Product page parsed.");
+                return doc;
+            }
+            catch (System.Exception ex)
+            {
+                _logger.Error("Error on product page pull",ex);
+            }
+            return null;
+        }
+
+
     }
 }

@@ -1,0 +1,4 @@
+﻿/Users/musakucuk/Desktop/AmazonPriceTracker/Infrastructure/AmazonPriceTrackerAPI.Infrastructure/Concrets/MailRepository.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/Infrastructure/AmazonPriceTrackerAPI.Infrastructure/HtmlTemplates/Images/AmazonPriceTracker.png
+/Users/musakucuk/Desktop/AmazonPriceTracker/Infrastructure/AmazonPriceTrackerAPI.Infrastructure/HtmlTemplates/ProductPriceDown.html
+/Users/musakucuk/Desktop/AmazonPriceTracker/Infrastructure/AmazonPriceTrackerAPI.Infrastructure/HtmlTemplates/ProductPriceUp.html

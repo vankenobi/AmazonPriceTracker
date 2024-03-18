@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<SonarProjectConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns="http://www.sonarsource.com/msbuild/analyzer/2021/1">
+  <AnalysisConfigPath>/Users/musakucuk/Desktop/AmazonPriceTracker/.sonarqube/conf/SonarQubeAnalysisConfig.xml</AnalysisConfigPath>
+  <ProjectPath>/Users/musakucuk/Desktop/AmazonPriceTracker/UnitTests/UnitTests.csproj</ProjectPath>
+  <FilesToAnalyzePath>/Users/musakucuk/Desktop/AmazonPriceTracker/.sonarqube/conf/4/FilesToAnalyze.txt</FilesToAnalyzePath>
+  <OutPath>/Users/musakucuk/Desktop/AmazonPriceTracker/.sonarqube/out/4</OutPath>
+  <ProjectType>Test</ProjectType>
+  <TargetFramework>net8.0</TargetFramework>
+</SonarProjectConfig>

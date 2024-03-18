@@ -1,0 +1,7 @@
+﻿/Users/musakucuk/Desktop/AmazonPriceTracker/UnitTests/ProductFixture/ProductReadFixture.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/UnitTests/Usings.cs
+/Users/musakucuk/.nuget/packages/microsoft.net.test.sdk/17.1.0/build/netcoreapp2.1/Microsoft.NET.Test.Sdk.Program.cs
+/Users/musakucuk/.nuget/packages/microsoft.testplatform.testhost/17.1.0/build/netcoreapp2.1/Microsoft.TestPlatform.PlatformAbstractions.dll
+/Users/musakucuk/.nuget/packages/xunit.runner.visualstudio/2.4.3/build/netcoreapp2.1/xunit.runner.visualstudio.dotnetcore.testadapter.dll
+/Users/musakucuk/.nuget/packages/xunit.runner.visualstudio/2.4.3/build/netcoreapp2.1/xunit.runner.reporters.netcoreapp10.dll
+/Users/musakucuk/.nuget/packages/xunit.runner.visualstudio/2.4.3/build/netcoreapp2.1/xunit.runner.utility.netcoreapp10.dll

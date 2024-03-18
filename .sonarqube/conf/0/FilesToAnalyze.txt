@@ -1,0 +1,14 @@
+﻿/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/Common/BaseEntity.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/Dto/AddProductTrackingDto.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/Dto/CheckTrackingProductDto.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/Dto/MailTemplateDto.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/Dto/TrackedProductDto.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/Dto/TrackingProductPriceAndIntervalDto.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/Dto/UpdateProductDto.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/Email.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/MailSetting.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/Product.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Entities/TrackedProduct.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Shared/Abstract/IServiceResponse.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Shared/ComplexTypes/ResponseCode.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Domain/Shared/Concret/Response.cs

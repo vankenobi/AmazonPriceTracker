@@ -1,0 +1,8 @@
+﻿/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Application/Repositories/IReadRepository.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Application/Repositories/IRepository.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Application/Repositories/IWriteRepository.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Application/Repositories/MailRepo/IMailRepository.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Application/Repositories/ProductRepo/IProductReadRepository.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Application/Repositories/ProductRepo/IProductWriteRepository.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Application/Repositories/TrackedProductRepo/ITrackedProductReadRepository.cs
+/Users/musakucuk/Desktop/AmazonPriceTracker/core/AmazonPriceTrackerAPI.Application/Repositories/TrackedProductRepo/ITrackedProductWriteRepository.cs

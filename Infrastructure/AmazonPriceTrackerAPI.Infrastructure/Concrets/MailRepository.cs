@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Net.Mail;
+﻿using System.Net.Mail;
 using AmazonPriceTrackerAPI.Application.Repositories.MailRepo;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Converters;
@@ -12,7 +7,6 @@ using System.Net;
 using AmazonPriceTrackerAPI.Domain.Entities;
 using AmazonPriceTrackerAPI.Domain.Shared.Concret;
 using AmazonPriceTrackerAPI.Domain.Shared.ComplexTypes;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace AmazonPriceTrackerAPI.Infrastructure.Concrets
 {
@@ -56,7 +50,7 @@ namespace AmazonPriceTrackerAPI.Infrastructure.Concrets
             var jsonSettings = new JsonSerializerSettings();
             jsonSettings.Converters.Add(new ExpandoObjectConverter());
             jsonSettings.Converters.Add(new StringEnumConverter());
-
+            
             dynamic config = JsonConvert.DeserializeObject<ExpandoObject>(json, jsonSettings);
           
             _smtpClient.Port = (int)(config.EmailSettings.Port);
