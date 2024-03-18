@@ -4,7 +4,7 @@
 ## Get latest from https://github.com/github/gitignore/blob/master/VisualStudio.gitignore
 
 # Ignore appsettings files
-appsettings*.json
+./Presentation/AmazonPriceTracker/appsettings*.json
 
 # User-specific files
 *.rsuser
