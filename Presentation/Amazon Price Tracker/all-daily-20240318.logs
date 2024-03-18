@@ -1,0 +1,48 @@
+2024-03-18 15:06:49.611 +03:00 [INF] 92a2a07a-2c63-496c-b98c-8fbadb64a9c4 ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:21:50.023 +03:00 [INF] 7c812306-952c-484e-af2b-3ef96ecae2a5 ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:21:50.616 +03:00 [INF] 7c812306-952c-484e-af2b-3ef96ecae2a5 The products whose working time come was checked and pulled
+2024-03-18 15:21:50.624 +03:00 [INF] 7c812306-952c-484e-af2b-3ef96ecae2a5 schedulled job started.
+2024-03-18 15:21:50.624 +03:00 [INF] 7c812306-952c-484e-af2b-3ef96ecae2a5 schedulled job finished.
+2024-03-18 15:22:43.356 +03:00 [INF] Serilog.Context.LogContext+ContextStackBookmark Processing request Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:22:45.909 +03:00 [INF] 5099fed5-c114-4847-84cf-184633ff2fe4 Product page parsed.
+2024-03-18 15:22:45.959 +03:00 [INF] 5099fed5-c114-4847-84cf-184633ff2fe4 Error on adding new product.
+2024-03-18 15:23:27.299 +03:00 [INF] Serilog.Context.LogContext+ContextStackBookmark Processing request Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:23:37.644 +03:00 [INF] 0478e7d5-8d11-4a16-a502-3bc51b3c76d2 Product page parsed.
+2024-03-18 15:24:22.519 +03:00 [INF] 566c0dd0-28c5-404e-ae53-43e83b8db809 ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:24:22.983 +03:00 [INF] 566c0dd0-28c5-404e-ae53-43e83b8db809 The products whose working time come was checked and pulled
+2024-03-18 15:24:22.991 +03:00 [INF] 566c0dd0-28c5-404e-ae53-43e83b8db809 schedulled job started.
+2024-03-18 15:24:22.992 +03:00 [INF] 566c0dd0-28c5-404e-ae53-43e83b8db809 schedulled job finished.
+2024-03-18 15:24:32.192 +03:00 [INF] Serilog.Context.LogContext+ContextStackBookmark Processing request Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:24:45.179 +03:00 [INF] 6b41699f-e4ef-47e1-a304-ccdd7a04ae0b Product page parsed.
+2024-03-18 15:25:57.482 +03:00 [INF] 6b41699f-e4ef-47e1-a304-ccdd7a04ae0b Error on adding new product.
+2024-03-18 15:26:01.274 +03:00 [INF] Serilog.Context.LogContext+ContextStackBookmark Processing request Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:26:06.783 +03:00 [INF] 7b0f8513-e63c-40dc-94d9-1be0a6ef2833 Product page parsed.
+2024-03-18 15:26:44.364 +03:00 [INF] 78e7ee93-0aa0-4f3e-89ff-023d26378826 ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:26:44.782 +03:00 [INF] 78e7ee93-0aa0-4f3e-89ff-023d26378826 The products whose working time come was checked and pulled
+2024-03-18 15:26:44.788 +03:00 [INF] 78e7ee93-0aa0-4f3e-89ff-023d26378826 schedulled job started.
+2024-03-18 15:26:44.788 +03:00 [INF] 78e7ee93-0aa0-4f3e-89ff-023d26378826 schedulled job finished.
+2024-03-18 15:26:57.436 +03:00 [INF] Serilog.Context.LogContext+ContextStackBookmark Processing request Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:27:08.443 +03:00 [INF] bf9b3d40-b523-47f1-bff0-c3e0339e8af7 Product page parsed.
+2024-03-18 15:46:31.561 +03:00 [INF] fa6008e2-90c4-4090-981d-2a9ca5f06ea1 ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:46:32.043 +03:00 [INF] fa6008e2-90c4-4090-981d-2a9ca5f06ea1 The products whose working time come was checked and pulled
+2024-03-18 15:46:32.063 +03:00 [INF] fa6008e2-90c4-4090-981d-2a9ca5f06ea1 schedulled job started.
+2024-03-18 15:46:32.063 +03:00 [INF] fa6008e2-90c4-4090-981d-2a9ca5f06ea1 schedulled job finished.
+2024-03-18 15:46:51.617 +03:00 [INF] Serilog.Context.LogContext+ContextStackBookmark Processing request Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:46:59.451 +03:00 [INF] a8871db5-f551-46ed-8b6a-b35b9a3eec31 Product page parsed.
+2024-03-18 15:50:21.729 +03:00 [INF] 7bc3eecd-6ae1-470f-b828-7120defad59a ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:50:22.188 +03:00 [INF] 7bc3eecd-6ae1-470f-b828-7120defad59a The products whose working time come was checked and pulled
+2024-03-18 15:50:22.195 +03:00 [INF] 7bc3eecd-6ae1-470f-b828-7120defad59a schedulled job started.
+2024-03-18 15:50:22.195 +03:00 [INF] 7bc3eecd-6ae1-470f-b828-7120defad59a schedulled job finished.
+2024-03-18 15:51:07.659 +03:00 [INF] Serilog.Context.LogContext+ContextStackBookmark Processing request Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:52:05.236 +03:00 [INF] f377454b-d946-4a1f-809e-de496a71711a Product page parsed.
+2024-03-18 15:52:47.548 +03:00 [INF] f377454b-d946-4a1f-809e-de496a71711a Product page parsed.
+2024-03-18 15:53:43.855 +03:00 [INF] f377454b-d946-4a1f-809e-de496a71711a Error on adding new product.
+2024-03-18 15:53:52.375 +03:00 [INF] Serilog.Context.LogContext+ContextStackBookmark Processing request Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:54:00.416 +03:00 [INF] e2468db1-5793-47ba-bd55-ef75da49d4c8 Product page parsed.
+2024-03-18 15:55:36.535 +03:00 [INF] e2468db1-5793-47ba-bd55-ef75da49d4c8 Error on adding new product.
+2024-03-18 15:56:07.722 +03:00 [INF] 937e01ce-61eb-4080-9f21-2c7954365ddc ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:56:07.911 +03:00 [INF] 937e01ce-61eb-4080-9f21-2c7954365ddc The products whose working time come was checked and pulled
+2024-03-18 15:56:07.911 +03:00 [INF] 937e01ce-61eb-4080-9f21-2c7954365ddc schedulled job started.
+2024-03-18 15:56:07.911 +03:00 [INF] 937e01ce-61eb-4080-9f21-2c7954365ddc schedulled job finished.
+2024-03-18 15:56:16.510 +03:00 [INF] Serilog.Context.LogContext+ContextStackBookmark Processing request Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 15:56:24.191 +03:00 [INF] f866d8fc-f841-41fb-85f4-7237a84d606c Product page parsed.

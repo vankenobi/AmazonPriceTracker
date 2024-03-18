@@ -63,9 +63,9 @@ namespace AmazonPriceTrackerAPI.Persistence.Concretes
                 _logger.Information("Product added succesfully. {@product}",product);
                 return new Response(ResponseCode.Success, "Product added succesfully.");
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                _logger.Information("Error on adding new product.");
+                _logger.Information("Error on adding new product.",ex);
                 return new Response(ResponseCode.Error,"Error on adding new product.");
             }
         }

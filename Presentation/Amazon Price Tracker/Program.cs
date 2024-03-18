@@ -1,4 +1,5 @@
 using AmazonPriceTrackerAPI.Persistence;
+using Microsoft.Extensions.Configuration;
 using Serilog;
 
 try
@@ -15,6 +16,10 @@ finally
 }
 
 var builder = WebApplication.CreateBuilder(args);
+
+//builder.Configuration.SetBasePath(Path.Combine(Directory.GetCurrentDirectory()));
+//var connectionString = builder.Configuration.GetValue<string>("EmailSettings:Port");
+
 
 // Add services to the container.
 

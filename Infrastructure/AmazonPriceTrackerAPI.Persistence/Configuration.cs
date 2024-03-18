@@ -21,7 +21,7 @@ namespace AmazonPriceTrackerAPI.Persistence
                 {
                     return Environment.GetEnvironmentVariable("DB_CONNECTION");
                 }
-                else if (Environment.GetEnvironmentVariable("ASPNET_ENVIRONMENT") == "Development")
+                else if (Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT") == "Development")
                 {
                     configurationManager.AddJsonFile("appsettings.Development.json");
                     return configurationManager.GetConnectionString("postgresql");
