@@ -5,7 +5,7 @@
 
 # Ignore appsettings files
 Presentation/AmazonPriceTracker/appsettings.json
-Presentation/AmazonPriceTracker/appsettings.development.json
+Presentation/AmazonPriceTracker/appsettings.Development.json
 
 # User-specific files
 *.rsuser

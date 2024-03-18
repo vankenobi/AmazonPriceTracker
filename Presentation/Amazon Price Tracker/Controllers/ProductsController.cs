@@ -2,7 +2,6 @@
 using AmazonPriceTrackerAPI.Domain.Entities;
 using AmazonPriceTrackerAPI.Domain.Shared.Concret;
 using Microsoft.AspNetCore.Mvc;
-using Serilog;
 using Serilog.Context;
 
 namespace Amazon_Price_Tracker.Controllers
