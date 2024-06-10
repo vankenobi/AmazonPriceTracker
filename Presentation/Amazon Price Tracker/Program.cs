@@ -1,5 +1,4 @@
 using AmazonPriceTrackerAPI.Persistence;
-using Microsoft.Extensions.Configuration;
 using Serilog;
 
 try

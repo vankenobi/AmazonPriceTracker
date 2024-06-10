@@ -46,3 +46,7 @@
 2024-03-18 15:56:07.911 +03:00 [INF] 937e01ce-61eb-4080-9f21-2c7954365ddc schedulled job finished.
 2024-03-18 15:56:16.510 +03:00 [INF] Serilog.Context.LogContext+ContextStackBookmark Processing request Serilog.Context.LogContext+ContextStackBookmark
 2024-03-18 15:56:24.191 +03:00 [INF] f866d8fc-f841-41fb-85f4-7237a84d606c Product page parsed.
+2024-03-18 16:40:37.751 +03:00 [INF] da66efcb-c94d-47da-b008-b85057429cc8 ExecuteAsync method runned. Serilog.Context.LogContext+ContextStackBookmark
+2024-03-18 16:40:38.355 +03:00 [INF] da66efcb-c94d-47da-b008-b85057429cc8 The products whose working time come was checked and pulled
+2024-03-18 16:40:38.390 +03:00 [INF] da66efcb-c94d-47da-b008-b85057429cc8 schedulled job started.
+2024-03-18 16:40:38.391 +03:00 [INF] da66efcb-c94d-47da-b008-b85057429cc8 schedulled job finished.
